@@ -75,6 +75,7 @@ void SpecificWorker::initialize(int period)
 
 void SpecificWorker::compute()
 {
+    qInfo() << "asdfasdf";
 	//computeCODE
 	//QMutexLocker locker(mutex);
 	//try
@@ -87,8 +88,6 @@ void SpecificWorker::compute()
 	//{
 	//  std::cout << "Error reading from Camera" << e << std::endl;
 	//}
-	
-	
 }
 
 int SpecificWorker::startup_check()
