@@ -51,10 +51,6 @@ bool SpecificWorker::setParams(RoboCompCommonBehavior::ParameterList params)
 //	catch(const std::exception &e) { qFatal("Error reading config params"); }
 
 
-
-
-
-
 	return true;
 }
 
@@ -68,6 +64,11 @@ void SpecificWorker::initialize(int period)
 	}
 	else
 	{
+        // Inicializaciones personales
+        viewer = new AbstractGraphicViewer(this, QRectF(-5000, -5000, 10000, 10000));
+        viewer->add_robot(460, 480, 0, 100, QColor("Blue"));
+        viewer->show();
+
 		timer.start(Period);
 	}
 
@@ -77,18 +78,18 @@ void SpecificWorker::compute()
 {
 	try
 	{
-        auto ldata = lidar3d_proxy->getLidarData("pearl", 0, 360, 1);
-        qInfo() << ldata.points.size();
+        auto ldata = lidar3d_proxy->getLidarData("helios", 0, 360, 1);
+        //qInfo() << ldata.points.size();
         const auto &points = ldata.points;
         if(points.empty()) return;
 
-        
+        draw_lidar(ldata.points, viewer);
 
         int offset = points.size()/2-points.size()/5;
         auto min_elem = std::min(points.begin()+offset, points.end()-offset,
-                          [](auto a, auto b) { return (a->x*a->x+a->y*a->y+a->z*a->z) > (b->x*b->x+b->y*b->y+b->z*b->z); });
+                          [](auto a, auto b) { return (a->x*a->x+a->y*a->y+a->z*a->z) < (b->x*b->x+b->y*b->y+b->z*b->z); });
 
-        qInfo() << min_elem->x << min_elem->y << min_elem->z;
+        //qInfo() << min_elem->x << min_elem->y << min_elem->z;
     }
 	catch(const Ice::Exception &e)
 	{  std::cout << "Error reading from Camera" << e << std::endl; 	}
@@ -101,8 +102,21 @@ int SpecificWorker::startup_check()
 	return 0;
 }
 
+void SpecificWorker::draw_lidar(const RoboCompLidar3D::TPoints &points, AbstractGraphicViewer *viewer)
+{
+    static std::vector<QGraphicsItem*> borrar;
+    for(auto &b: borrar)
+        viewer->scene.removeItem(b);
+    borrar.clear();
 
-
+    for(const auto &p: points)
+    {
+        auto point = viewer->scene.addRect(-50, -50, 100, 100, QPen(QColor("blue")), QBrush(QColor("blue")));
+        point->setPos(p.x*1000, p.y*1000);
+        
+        borrar.push_back(point);
+    }
+}
 
 /**************************************/
 // From the RoboCompLidar3D you can call this methods:
