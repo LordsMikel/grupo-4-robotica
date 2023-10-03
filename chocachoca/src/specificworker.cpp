@@ -68,6 +68,7 @@ void SpecificWorker::initialize(int period)
         viewer = new AbstractGraphicViewer(this, QRectF(-5000, -5000, 10000, 10000));
         viewer->add_robot(460, 480, 0, 100, QColor("Blue"));
         viewer->show();
+        viewer->activateWindow();
 
 		timer.start(Period);
 	}
@@ -78,8 +79,8 @@ void SpecificWorker::compute()
 {
 	try
 	{
-        auto ldata = lidar3d_proxy->getLidarData("helios", 0, 360, 1);
-        //qInfo() << ldata.points.size();
+        auto ldata = lidar3d_proxy->getLidarData("bpearl", 0, 2*M_PI, 1);
+        qInfo() << ldata.points.size();
         const auto &points = ldata.points;
         if(points.empty()) return;
 
@@ -107,12 +108,14 @@ void SpecificWorker::draw_lidar(const RoboCompLidar3D::TPoints &points, Abstract
     static std::vector<QGraphicsItem*> borrar;
     for(auto &b: borrar)
         viewer->scene.removeItem(b);
+        delete(b);
+
     borrar.clear();
 
     for(const auto &p: points)
     {
         auto point = viewer->scene.addRect(-50, -50, 100, 100, QPen(QColor("blue")), QBrush(QColor("blue")));
-        point->setPos(p.x*1000, p.y*1000);
+        point->setPos(p.x, p.y);
         
         borrar.push_back(point);
     }
