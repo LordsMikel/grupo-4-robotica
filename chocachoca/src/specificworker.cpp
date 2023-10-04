@@ -80,17 +80,20 @@ void SpecificWorker::compute()
 	try
 	{
         auto ldata = lidar3d_proxy->getLidarData("bpearl", 0, 2*M_PI, 1);
-        qInfo() << ldata.points.size();
+        //qInfo() << ldata.points.size();
         const auto &points = ldata.points;
-        if(points.empty()) return;
+        //if(points.empty()) return;
 
-        draw_lidar(ldata.points, viewer);
+        RoboCompLidar3D::TPoints filtered_points;
+        std::ranges::remove_copy_if(ldata.points, std::back_inserter(filtered_points), [](auto &p){ return p.z > 2000;});
+        draw_lidar(filtered_points, viewer);
 
-        int offset = points.size()/2-points.size()/5;
-        auto min_elem = std::min(points.begin()+offset, points.end()-offset,
-                          [](auto a, auto b) { return (a->x*a->x+a->y*a->y+a->z*a->z) < (b->x*b->x+b->y*b->y+b->z*b->z); });
+        /// control
+        //int offset = points.size()/2-points.size()/5;
+        auto min_elem = std::min(points.begin(), points.end(),
+                          [](auto a, auto b) { return std::hypot(a->x, a->y) < std::hypot(b->x, b->y);});
 
-        //qInfo() << min_elem->x << min_elem->y << min_elem->z;
+        qInfo() << min_elem->x << min_elem->y << min_elem->z;
     }
 	catch(const Ice::Exception &e)
 	{  std::cout << "Error reading from Camera" << e << std::endl; 	}
@@ -107,8 +110,10 @@ void SpecificWorker::draw_lidar(const RoboCompLidar3D::TPoints &points, Abstract
 {
     static std::vector<QGraphicsItem*> borrar;
     for(auto &b: borrar)
+    {
         viewer->scene.removeItem(b);
-        delete(b);
+        delete b;
+    }
 
     borrar.clear();
 

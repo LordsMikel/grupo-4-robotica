@@ -1185,7 +1185,9 @@ src/CMakeFiles/chocachoca.dir/chocachoca_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.h \
+ /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
+ /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QScreen \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_genericworker.cpp \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../genericworker.h \
@@ -1195,4 +1197,5 @@ src/CMakeFiles/chocachoca.dir/chocachoca_autogen/mocs_compilation.cpp.o: \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_specificworker.cpp \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../specificworker.h \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/genericworker.h \
- /home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.h
+ /home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.h \
+ /usr/include/c++/11/ranges

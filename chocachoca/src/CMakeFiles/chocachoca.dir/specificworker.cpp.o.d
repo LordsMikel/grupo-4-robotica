@@ -1128,7 +1128,9 @@ src/CMakeFiles/chocachoca.dir/specificworker.cpp.o: \
  /usr/include/c++/11/deque /usr/include/c++/11/bits/stl_deque.h \
  /usr/include/c++/11/bits/deque.tcc /usr/include/Ice/FactoryTableInit.h \
  /usr/include/Ice/DefaultValueFactory.h \
+ /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
+ /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.h \
  /home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGraphicsScene \
@@ -1157,4 +1159,5 @@ src/CMakeFiles/chocachoca.dir/specificworker.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qgridlayout.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGraphicsPolygonItem \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qgraphicsitem.h \
- /usr/include/x86_64-linux-gnu/qt6/QtGui/qpainterpath.h
+ /usr/include/x86_64-linux-gnu/qt6/QtGui/qpainterpath.h \
+ /usr/include/c++/11/ranges

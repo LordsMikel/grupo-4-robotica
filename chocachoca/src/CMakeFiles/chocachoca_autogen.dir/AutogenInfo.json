@@ -531,7 +531,9 @@
 	"MOC_SKIP" : 
 	[
 		"/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.cpp",
+		"/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.cpp",
 		"/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.cpp",
+		"/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.cpp",
 		"/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/ui_mainUI.h"
 	],
 	"MULTI_CONFIG" : false,
@@ -592,7 +594,9 @@
 	"UIC_SKIP" : 
 	[
 		"/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.cpp",
+		"/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.cpp",
 		"/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.cpp",
+		"/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.cpp",
 		"/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/mainUI.ui",
 		"/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/ui_mainUI.h"
 	],

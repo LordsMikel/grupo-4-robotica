@@ -1153,5 +1153,7 @@ src/CMakeFiles/chocachoca.dir/commonbehaviorI.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsizepolicy.h \
+ /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
+ /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.h \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/genericmonitor.h

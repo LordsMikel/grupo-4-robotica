@@ -1,6 +1,7 @@
 /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_genericworker.cpp: /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/genericworker.h \
   /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/moc_predefs.h \
   /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.h \
+  /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
   /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
   /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/chocachoca/src/ui_mainUI.h \
   /home/usuario/robocomp_ws/src/robocomp/robocomp_core/classes/qlog/qlog.h \

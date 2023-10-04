@@ -1356,7 +1356,9 @@ src/CMakeFiles/chocachoca.dir/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.h \
+ /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
+ /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.h \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/specificworker.h \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/genericworker.h \
  /home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.h \
@@ -1372,5 +1374,6 @@ src/CMakeFiles/chocachoca.dir/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QVBoxLayout \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGraphicsPolygonItem \
+ /usr/include/c++/11/ranges \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/specificmonitor.h \
  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/commonbehaviorI.h

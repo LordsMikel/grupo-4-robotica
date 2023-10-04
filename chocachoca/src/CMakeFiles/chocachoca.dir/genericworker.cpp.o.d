@@ -1127,4 +1127,6 @@ src/CMakeFiles/chocachoca.dir/genericworker.cpp.o: \
  /usr/include/c++/11/deque /usr/include/c++/11/bits/stl_deque.h \
  /usr/include/c++/11/bits/deque.tcc /usr/include/Ice/FactoryTableInit.h \
  /usr/include/Ice/DefaultValueFactory.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h
+ /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
+ /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
+ /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.h
