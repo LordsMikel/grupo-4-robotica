@@ -33,32 +33,48 @@ class SpecificWorker : public GenericWorker
 {
 Q_OBJECT
 public:
-	SpecificWorker(TuplePrx tprx, bool startup_check);
-	~SpecificWorker();
-	bool setParams(RoboCompCommonBehavior::ParameterList params);
+    SpecificWorker(TuplePrx tprx, bool startup_check);
+    ~SpecificWorker();
+    bool setParams(RoboCompCommonBehavior::ParameterList params);
 
 
 
 public slots:
-	void compute();
-	int startup_check();
-	void initialize(int period);
+    void compute();
+    int startup_check();
+    void initialize(int period);
 
 private:
-	bool startup_check_flag;
+    bool startup_check_flag;
     AbstractGraphicViewer *viewer;
-    RoboCompLidar3D::TPoints filtered_points;
+
+
+    //estructura de acoplamiento del robot
 
     struct RobotSpeed
     {
         float adv=0, side=0, rot=0;
     };
-    void draw_lidar(const RoboCompLidar3D::TPoints &points, AbstractGraphicViewer *viewer);
+
+    void draw_lidar(RoboCompLidar3D::TPoints &points, AbstractGraphicViewer *viewer);
+
 
     // Estados
-    enum class Estado { IDLE, FOLLOW_WALL, STRAIGHT_LINE, SPIRAL };
-    Estado estado = Estado::IDLE;
-    std::tuple<Estado, RobotSpeed> chocachoca();
+    enum class Estado { IDLE, FOLLOW_WALL, STRAIGHT_LINE, SPIRAL, TURN};
+    Estado estado = Estado::STRAIGHT_LINE;
+
+
+    //Tuplas para acoplar los estados:
+
+
+    std::tuple<Estado, RobotSpeed> chocachoca(RoboCompLidar3D::TPoints &points);
+
+
+
+    std::tuple<Estado, RobotSpeed> follow_wall(RoboCompLidar3D::TPoints &points);
+
+    std::tuple<Estado, RobotSpeed> turn(RoboCompLidar3D::TPoints &points);
+
 
 };
 
