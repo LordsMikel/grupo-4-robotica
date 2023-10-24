@@ -101,23 +101,27 @@ void SpecificWorker::compute() {
         case Estado::IDLE:
             break;
         case Estado::FOLLOW_WALL:
-            //res = follow_wall(filtered_points);
+            res = follow_wall(filtered_points);
             break;
         case Estado::STRAIGHT_LINE: {
             res = chocachoca(filtered_points);
             break;
         }
-        //case Estado::TURN:
+        case Estado::TURN: {
+            res = turn(filtered_points);
+            break;
+        }
+
         case Estado::SPIRAL:
             break;
     }
 
 
- //Desempaquetamos la tupla.
-   estado = std::get<0>(res);
-   RobotSpeed robot_speed_res = std::get<1>(res);
-   const auto &[adv, side, rot] = robot_speed_res;
-   omnirobot_proxy->setSpeedBase(adv, side, rot);
+    //Desempaquetamos la tupla.
+    estado = std::get<0>(res);
+    RobotSpeed robot_speed_res = std::get<1>(res);
+    const auto &[adv, side, rot] = robot_speed_res;
+    omnirobot_proxy->setSpeedBase(adv, side, rot);
 
 }
 
@@ -135,9 +139,12 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::t
 
     Estado state;
 
-    float adv = 0;
-    float rot = 0;
-    float side = 0;
+    RobotSpeed robot;
+
+    float adv = 1.0;
+    float side = robot.side;
+    float rot = robot.rot;
+
 
     if (middle_distance > FREE_SPACE_THRESHOLD)
     {
@@ -146,7 +153,8 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::t
     }
     // Si no hay espacio libre, no se hace nada y se mantiene el signo de giro seleccionado al salir de FORWARD.
 
-    return std::make_tuple(state, RobotSpeed{adv, side, rot});
+
+    return std::make_tuple(state, RobotSpeed{adv, side , rot});
 
 
 
@@ -157,37 +165,61 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::t
 
 
 std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::follow_wall(RoboCompLidar3D::TPoints &points){
-    int offset = points.size()/2 - points.size()/3;
+
+
+
+    int start_offset = points.size() / 6;
+    int end_offset = (points.size() * 2) / 3;
+
 
     //Distancias mínimas
 
-    auto min_elem = std::min_element(points.begin()+offset, points.end()-offset,
+    auto min_elem = std::min_element(points.begin() + start_offset, points.begin() + end_offset,
                                      [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
+
+
+    qInfo()<< "Estado follow wall";
 
     RobotSpeed robot_speed;
     Estado estado;
-    const float MIN_DISTANCE = 1000;
-    const float REFERENCE_DISTANCE = 400;  // Assume a reference distance, adjust as needed
-    const float delta = 0.1;  // Assume a delta value, adjust as needed
+    const float MIN_DISTANCE = 600;
+    const float REFERENCE_DISTANCE = 300;  // Assume a reference distance, adjust as needed
+    const float delta = 1;  // Assume a delta value, adjust as needed
+
+    //float lateral_distance = std::atan2(min_elem->x,min_elem->y);
 
     float lateral_distance = std::hypot(min_elem->x, min_elem->y);
 
+    static std::random_device rd;
+    static std::mt19937 mt(rd());
+    static std::uniform_real_distribution<double> dist(0, 1.0);
+
+
+
     if(lateral_distance < MIN_DISTANCE) {
         //Volvemos para atrás
-        estado = Estado::TURN;
-        robot_speed = RobotSpeed{.adv=0, .side=0, .rot=0.5};
+        //estado = Estado::TURN;
+
+        qInfo()<< "Menor la distancia lateral";
+
+
+        estado =  Estado::TURN;
+        robot_speed = RobotSpeed{.adv=0.5, .side=0, .rot=((std::distance(points.begin(), min_elem)) < points.size() / 2) ? 0.5 : -0.5};
+
     }
     else if(lateral_distance < REFERENCE_DISTANCE - delta) {
 
         // estamos cerca
         estado =  Estado::STRAIGHT_LINE;
 
+        qInfo()<< "DELTA MAYOR";
+
 
         robot_speed = RobotSpeed{.adv=1, .side=0, .rot=-0.2};
     }
     else if(lateral_distance > REFERENCE_DISTANCE + delta) {
         //Straigh line derecho
-         estado = Estado::STRAIGHT_LINE;
+        estado = Estado::STRAIGHT_LINE;
         robot_speed = RobotSpeed{.adv=1, .side=0, .rot=0.2};
     }
     else {
@@ -220,17 +252,44 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::c
 
     RobotSpeed robot_speed;
     const float MIN_DISTANCE = 1000;
+//    if(std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE)
+//    {
+//        qInfo()<< "Minimo";
+//
+//        if(dist(mt) > 0.5)  //Tiramos un dado para cambiar a chocachoca STRAIGHT LINE
+//            return std::make_tuple(Estado::STRAIGHT_LINE, RobotSpeed{.adv=0, .side=0, .rot=0});
+//        else
+//            robot_speed = RobotSpeed{.adv= 0.5, .side=0, .rot=0.5};
+//
+//
+//
+//
+//    }
+//    else
+//        robot_speed = RobotSpeed{.adv=1, .side=0, .rot=0};
+
+
     if(std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE)
     {
-        if(dist(mt) > 0.5)  //Tiramos un dado para cambiar a chocachoca STRAIGHT LINE
-            return std::make_tuple(Estado::STRAIGHT_LINE, RobotSpeed{.adv=0, .side=0, .rot=0});
-        else
-            robot_speed = RobotSpeed{.adv=0, .side=0, .rot=0.5};
+        qInfo()<< "Too close to the wall - Avoiding";
+
+        // Move away from the wall
+        robot_speed = RobotSpeed{.adv= 0.5, .side=0, .rot=0.5};
+        return std::make_tuple(Estado::FOLLOW_WALL, robot_speed);
+
+
+
     }
     else
+    {
+        // Continue moving forward
         robot_speed = RobotSpeed{.adv=1, .side=0, .rot=0};
+        return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
 
-    return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
+    }
+
+
+
 
 }
 
