@@ -98,8 +98,12 @@ void SpecificWorker::compute() {
 
     switch(estado)
     {
-        case Estado::IDLE:
+        //Cambiar después de IDLE:
+        case Estado::IDLE: {
+            res = spiral();
             break;
+        }
+
         case Estado::FOLLOW_WALL:
             res = follow_wall(filtered_points);
             break;
@@ -126,6 +130,7 @@ void SpecificWorker::compute() {
 }
 
 
+//Convertir el estado turn lo convertimos en el estado intermedio IMP ENTONCES VAMOS CAMBIANDO ENTRE ESTADOS ALETORIEDAD MIRANDO LA DISTANCIA MINIMA A LA PARED SINO VOLVEMOS AL ESTADO ANTERIOR
 
 std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::turn(RoboCompLidar3D::TPoints &points) {
 
@@ -242,6 +247,45 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::c
 
 }
 
+
+//std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::spiral()
+//{
+//    static float theta = 0;  // Ángulo inicial
+//    const float a = 100;  // Parámetro a de la espiral de Arquímedes
+//    const float b = 10;   // Parámetro b de la espiral de Arquímedes
+//    const float deltaTheta = 0.1;  // Incremento del ángulo en cada iteración
+//
+//    // Calcular el radio de la espiral
+//    float r = a + b * theta;
+//
+//    // Calcular la velocidad lineal y angular
+//    float adv = r * deltaTheta;  // Velocidad lineal
+//    float rot = deltaTheta;  // Velocidad angular
+//
+//    // Incrementar el ángulo para la siguiente iteración
+//    theta += deltaTheta;
+//
+//    // Crear una estructura RobotSpeed
+//    RobotSpeed robot_speed = RobotSpeed{.adv = adv, .side = 0, .rot = rot};
+//
+//    // Retornar el estado y la velocidad del robot
+//    return std::make_tuple(Estado::SPIRAL, robot_speed);
+//}
+
+
+std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::spiral()
+{
+    static float rot = 0.1;  // Inicialización de la rotación
+    static float adv = 1.0;  // Inicialización de la velocidad de avance
+
+    RobotSpeed robot_speed;
+    robot_speed = RobotSpeed{.adv = adv, .side = 0, .rot = rot};
+
+    rot += 0.01;  // Incremento gradual de la rotación para cerrar la espiral
+    if (rot > 1.0)  // Limitación de la rotación para mantenerla en un rango controlado
+        rot = 0.1;
+
+    return std::make_tuple(Estado::SPIRAL, robot_speed);}
 
 int SpecificWorker::startup_check() {
     std::cout << "Startup check" << std::endl;

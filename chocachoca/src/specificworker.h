@@ -61,7 +61,7 @@ private:
 
     // Estados
     enum class Estado { IDLE, FOLLOW_WALL, STRAIGHT_LINE, SPIRAL, TURN};
-    Estado estado = Estado::STRAIGHT_LINE;
+    Estado estado = Estado::IDLE;
 
 
     //Tuplas para acoplar los estados:
@@ -74,6 +74,9 @@ private:
     std::tuple<Estado, RobotSpeed> follow_wall(RoboCompLidar3D::TPoints &points);
 
     std::tuple<Estado, RobotSpeed> turn(RoboCompLidar3D::TPoints &points);
+
+    std::tuple<Estado, RobotSpeed> spiral();
+
 
 
 };
