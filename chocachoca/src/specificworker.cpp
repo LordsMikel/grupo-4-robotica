@@ -127,146 +127,99 @@ void SpecificWorker::compute() {
 
 
 
-
 std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::turn(RoboCompLidar3D::TPoints &points) {
 
-    const float FREE_SPACE_THRESHOLD = 400;  // Umbral ajustado para espacio libre
-    const float MAX_ADV = 1.0;  // Asume que el avance máximo es 1.0, reemplaza con tu valor
+    // Definir los índices de inicio y fin para el rango lateral
+    int start_offset_lat = points.size() / 6;
+    int end_offset_lat =  (points.size() * 2)/3;
 
-    // Determina si hay espacio libre al frente chequeando el dato láser en frente del robot
-    int middle_index = points.size() / 2;
-    auto middle_distance = std::hypot(points[middle_index].x, points[middle_index].y);
+    // Encontrar el punto más cercano en el rango lateral
+    auto min_elem_lat = std::min_element(points.begin() + start_offset_lat, points.end() - end_offset_lat,
+                                         [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
 
-    Estado state;
-
-    RobotSpeed robot;
-
-    float adv = 1.0;
-    float side = robot.side;
-    float rot = robot.rot;
+    // Calcular el ángulo del punto más cercano
+    float angle = std::atan2(min_elem_lat->y, min_elem_lat->x);
 
 
-    if (middle_distance > FREE_SPACE_THRESHOLD)
-    {
-        state = Estado::FOLLOW_WALL;  // o State::FOLLOW_WALL dependiendo del comportamiento deseado
-        adv = MAX_ADV;
+
+    // Definir los valores por defecto
+    Estado state = Estado::FOLLOW_WALL;  // Asumiendo que volveremos a FOLLOW_WALL
+    RobotSpeed robot_speed;
+
+
+    const float UmbralRot = 3.0;
+
+    float rotAngular = UmbralRot * angle;
+
+
+    if(std::abs(angle) < 0.1) {  // Ajusta el valor 0.1 según sea necesario
+        qInfo()<< "Cambiando";
+        robot_speed = RobotSpeed{.adv=1.0, .side=0, .rot=UmbralRot};
+    } else {
+        qInfo()<< "Cambiando 2";
+
+        robot_speed = RobotSpeed{.adv=0, .side=0, .rot=UmbralRot};
     }
-    // Si no hay espacio libre, no se hace nada y se mantiene el signo de giro seleccionado al salir de FORWARD.
 
-
-    return std::make_tuple(state, RobotSpeed{adv, side , rot});
-
-
-
-
+    return std::make_tuple(state, robot_speed);
 }
-
 
 
 
 std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::follow_wall(RoboCompLidar3D::TPoints &points){
 
+    // Define los índices de inicio y fin para el rango lateral
+    int start_offset_lat = points.size() / 6;
+    int end_offset_lat = (points.size() * 2)/3;
 
+    // Encuentra el punto más cercano en el rango lateral
+    auto min_elem_lat = std::min_element(points.begin() + start_offset_lat, points.end() - end_offset_lat,
+                                         [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
 
-    int start_offset = points.size() / 6;
-    int end_offset = (points.size() * 2) / 3;
-
-
-    //Distancias mínimas
-
-    auto min_elem = std::min_element(points.begin() + start_offset, points.begin() + end_offset,
-                                     [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
-
-
-    qInfo()<< "Estado follow wall";
+    // Calcula el ángulo y la distancia al punto más cercano
+    float angle = std::atan2(min_elem_lat->y, min_elem_lat->x);
+    float lateral_distance = std::hypot(min_elem_lat->x, min_elem_lat->y);
 
     RobotSpeed robot_speed;
     Estado estado;
-    const float MIN_DISTANCE = 600;
-    const float REFERENCE_DISTANCE = 300;  // Assume a reference distance, adjust as needed
-    const float delta = 1;  // Assume a delta value, adjust as needed
+    const float REFERENCE_DISTANCE = 900;  // Asume una distancia de referencia, ajusta según sea necesario
+    const float UmbralRot = 5.0;
 
-    //float lateral_distance = std::atan2(min_elem->x,min_elem->y);
+    float rotAngular = UmbralRot * angle;
 
-    float lateral_distance = std::hypot(min_elem->x, min_elem->y);
-
-    static std::random_device rd;
-    static std::mt19937 mt(rd());
-    static std::uniform_real_distribution<double> dist(0, 1.0);
-
-
-
-    if(lateral_distance < MIN_DISTANCE) {
-        //Volvemos para atrás
-        //estado = Estado::TURN;
-
-        qInfo()<< "Menor la distancia lateral";
-
-
-        estado =  Estado::TURN;
-        robot_speed = RobotSpeed{.adv=0.5, .side=0, .rot=((std::distance(points.begin(), min_elem)) < points.size() / 2) ? 0.5 : -0.5};
-
-    }
-    else if(lateral_distance < REFERENCE_DISTANCE - delta) {
-
-        // estamos cerca
-        estado =  Estado::STRAIGHT_LINE;
-
-        qInfo()<< "DELTA MAYOR";
-
-
-        robot_speed = RobotSpeed{.adv=1, .side=0, .rot=-0.2};
-    }
-    else if(lateral_distance > REFERENCE_DISTANCE + delta) {
-        //Straigh line derecho
+    if(lateral_distance < REFERENCE_DISTANCE - 100) {  // Si está demasiado cerca de la pared
         estado = Estado::STRAIGHT_LINE;
-        robot_speed = RobotSpeed{.adv=1, .side=0, .rot=0.2};
+        robot_speed = RobotSpeed{.adv=1, .side=0, .rot=rotAngular};
     }
-    else {
+    else if(lateral_distance > REFERENCE_DISTANCE + 100) {  // Si está demasiado lejos de la pared
+        estado = Estado::STRAIGHT_LINE;
+        robot_speed = RobotSpeed{.adv=1, .side=0, .rot=-rotAngular};
+    }
+    else {  // Si está a una buena distancia de la pared
         estado = Estado::STRAIGHT_LINE;
         robot_speed = RobotSpeed{.adv=1, .side=0, .rot=0};
     }
 
     return std::make_tuple(estado, robot_speed);
-
-
-
-
 }
+
+
+
 
 std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::chocachoca(RoboCompLidar3D::TPoints &points){
 
 
     qInfo()<< "Estado chocachoca";
-    //Random:
-    static std::random_device rd;
-    static std::mt19937 mt(rd());
-    static std::uniform_real_distribution<double> dist(0, 1.0);
 
 
     //Sacamos los puntos mínimos.
 
-    int offset = points.size()/2-points.size()/3;
+    int offset = points.size()/2 - points.size()/3;
     auto min_elem = std::min_element(points.begin()+offset, points.end()-offset,
                                      [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y);});
 
     RobotSpeed robot_speed;
-    const float MIN_DISTANCE = 1000;
-//    if(std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE)
-//    {
-//        qInfo()<< "Minimo";
-//
-//        if(dist(mt) > 0.5)  //Tiramos un dado para cambiar a chocachoca STRAIGHT LINE
-//            return std::make_tuple(Estado::STRAIGHT_LINE, RobotSpeed{.adv=0, .side=0, .rot=0});
-//        else
-//            robot_speed = RobotSpeed{.adv= 0.5, .side=0, .rot=0.5};
-//
-//
-//
-//
-//    }
-//    else
-//        robot_speed = RobotSpeed{.adv=1, .side=0, .rot=0};
+    const float MIN_DISTANCE = 600;
 
 
     if(std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE)
@@ -274,18 +227,14 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::c
         qInfo()<< "Too close to the wall - Avoiding";
 
         // Move away from the wall
-        robot_speed = RobotSpeed{.adv= 0.5, .side=0, .rot=0.5};
+        robot_speed = RobotSpeed{.adv = 0, .side = 0, .rot = 0};
         return std::make_tuple(Estado::FOLLOW_WALL, robot_speed);
-
-
-
     }
     else
-    {
-        // Continue moving forward
+    {  // Continue moving forward
+        qInfo() << "Follow movement";
         robot_speed = RobotSpeed{.adv=1, .side=0, .rot=0};
         return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
-
     }
 
 
