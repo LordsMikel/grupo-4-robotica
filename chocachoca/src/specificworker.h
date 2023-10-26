@@ -79,6 +79,7 @@ private:
 
     std::tuple<Estado, RobotSpeed> check_wall(RoboCompLidar3D::TPoints &points);
 
+    bool isStraightWallStretch(const RoboCompLidar3D::TPoints &points, float min_distance, int range_offset);
 
 
 
