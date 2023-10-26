@@ -96,6 +96,9 @@ void SpecificWorker::compute() {
     std::tuple<Estado, RobotSpeed> res;
 
 
+
+
+
     switch(estado)
     {
         //Cambiar después de IDLE:
@@ -211,81 +214,77 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
 
 
-std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::chocachoca(RoboCompLidar3D::TPoints &points){
 
 
-    qInfo()<< "Estado chocachoca";
+
+
+
+
+std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::chocachoca(RoboCompLidar3D::TPoints &points) {
+
+
+    qInfo() << "Estado chocachoca";
 
 
     //Sacamos los puntos mínimos.
 
-    int offset = points.size()/2 - points.size()/3;
-    auto min_elem = std::min_element(points.begin()+offset, points.end()-offset,
-                                     [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y);});
+    int offset = points.size() / 2 - points.size() / 3;
+    auto min_elem = std::min_element(points.begin() + offset, points.end() - offset,
+                                     [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
 
     RobotSpeed robot_speed;
     const float MIN_DISTANCE = 600;
 
 
-    if(std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE)
-    {
-        qInfo()<< "Too close to the wall - Avoiding";
+    if (std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE) {
+        qInfo() << "Too close to the wall - Avoiding";
 
         // Move away from the wall
         robot_speed = RobotSpeed{.adv = 0, .side = 0, .rot = 0};
         return std::make_tuple(Estado::FOLLOW_WALL, robot_speed);
-    }
-    else
-    {  // Continue moving forward
+    } else {  // Continue moving forward
         qInfo() << "Follow movement";
         robot_speed = RobotSpeed{.adv=1, .side=0, .rot=0};
+
+
+//        // Crear un generador de números aleatorios
+//        std::mt19937 gen(std::random_device{}());
+//
+//        // Crear una distribución uniforme entre 1 y 10
+//        std::uniform_real_distribution<> distrib(0, 1.0);
+//
+//        float md = distrib(gen);
+//
+//        if (md < 0.5) {
+//            return std::make_tuple(Estado::SPIRAL, robot_speed);
+//
+//        }
+
         return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
     }
-
-
-
-
 }
 
 
-//std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::spiral()
-//{
-//    static float theta = 0;  // Ángulo inicial
-//    const float a = 100;  // Parámetro a de la espiral de Arquímedes
-//    const float b = 10;   // Parámetro b de la espiral de Arquímedes
-//    const float deltaTheta = 0.1;  // Incremento del ángulo en cada iteración
-//
-//    // Calcular el radio de la espiral
-//    float r = a + b * theta;
-//
-//    // Calcular la velocidad lineal y angular
-//    float adv = r * deltaTheta;  // Velocidad lineal
-//    float rot = deltaTheta;  // Velocidad angular
-//
-//    // Incrementar el ángulo para la siguiente iteración
-//    theta += deltaTheta;
-//
-//    // Crear una estructura RobotSpeed
-//    RobotSpeed robot_speed = RobotSpeed{.adv = adv, .side = 0, .rot = rot};
-//
-//    // Retornar el estado y la velocidad del robot
-//    return std::make_tuple(Estado::SPIRAL, robot_speed);
-//}
 
 
-std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::spiral()
-{
-    static float rot = 0.1;  // Inicialización de la rotación
+//Este funciona
+std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::spiral(){
+    qInfo()<<"Estado spiral funciona";
+    static float rot = 0.3;  // Inicialización de la rotación
     static float adv = 1.0;  // Inicialización de la velocidad de avance
+    static float increase_rate = 0.005;  // Tasa de incremento de la rotación
 
     RobotSpeed robot_speed;
+
+    // Incrementa la rotación en cada llamada a la función
+    rot += increase_rate;
+
     robot_speed = RobotSpeed{.adv = adv, .side = 0, .rot = rot};
 
-    rot += 0.01;  // Incremento gradual de la rotación para cerrar la espiral
-    if (rot > 1.0)  // Limitación de la rotación para mantenerla en un rango controlado
-        rot = 0.1;
+    return std::make_tuple(Estado::SPIRAL, robot_speed);
+}
 
-    return std::make_tuple(Estado::SPIRAL, robot_speed);}
+
 
 int SpecificWorker::startup_check() {
     std::cout << "Startup check" << std::endl;
