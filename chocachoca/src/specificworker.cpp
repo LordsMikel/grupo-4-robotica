@@ -95,44 +95,29 @@ void SpecificWorker::compute() {
     draw_lidar(filtered_points, viewer);
     std::tuple<Estado, RobotSpeed> res;
 
-    // Assuming you have a member variable to count the iterations
-    static int st_iterations = 0;
-    const int MAX_FOLLOW_WALL_ITERATIONS = 50;  // Change this value as needed
 
 
     switch(estado)
     {
-        //Cambiar después de IDLE:
+
         case Estado::IDLE: {
             res = spiral(filtered_points);
             break;
         }
-
-        case Estado::CHECK_WALL: {
-
-            res = check_wall(filtered_points);
-            break;
-
-        }
-
         case Estado::FOLLOW_WALL:
             res = follow_wall(filtered_points);
 
             break;
         case Estado::STRAIGHT_LINE: {
-            res = chocachoca(filtered_points);
-            st_iterations++;
-
+            res = straight_line(filtered_points);
             break;
         }
-        case Estado::TURN: {
-            res = turn(filtered_points);
-            break;
-        }
-
         case Estado::SPIRAL: {
-
             res = spiral(filtered_points);
+            break;
+        }
+        case Estado::MOVE_TO_CENTER: {
+            res = move_to_center(filtered_points);
             break;
 
         }
@@ -144,12 +129,6 @@ void SpecificWorker::compute() {
     //Desempaquetamos la tupla.
     estado = std::get<0>(res);
 
-    qInfo() << st_iterations;
-
-    if(st_iterations >= MAX_FOLLOW_WALL_ITERATIONS) {
-        estado = Estado::SPIRAL;  // Transition to SPIRAL state
-        st_iterations = 0;  // Reset the counter
-    }
 
 
 
@@ -159,49 +138,29 @@ void SpecificWorker::compute() {
 
 }
 
-
-//Convertir el estado turn lo convertimos en el estado intermedio IMP ENTONCES VAMOS CAMBIANDO ENTRE ESTADOS ALETORIEDAD MIRANDO LA DISTANCIA MINIMA A LA PARED SINO VOLVEMOS AL ESTADO ANTERIOR
+/*
+/////////////////////////////////////////////////////////////////////////////////////////////
+                                    ESTADOS
+/////////////////////////////////////////////////////////////////////////////////////////////
+*/
 
 std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::turn(RoboCompLidar3D::TPoints &points) {
 
-    // Definir los índices de inicio y fin para el rango lateral
-    int start_offset_lat = points.size() / 6;
-    int end_offset_lat =  (points.size() * 2)/3;
+    qInfo() << "Estado TURN";
 
-    // Encontrar el punto más cercano en el rango lateral
-    auto min_elem_lat = std::min_element(points.begin() + start_offset_lat, points.end() - end_offset_lat,
-                                         [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
-
-    // Calcular el ángulo del punto más cercano
-    float angle = std::atan2(min_elem_lat->y, min_elem_lat->x);
-
-
-
-    // Definir los valores por defecto
-    Estado state = Estado::FOLLOW_WALL;  // Asumiendo que volveremos a FOLLOW_WALL
     RobotSpeed robot_speed;
 
+    //Habiendo guardado la última rotación de follow_wall en una variable miembro llamada last_rotAngular
+    float rotAngular = last_rotAngular;
 
-    const float UmbralRot = 3.0;
+    robot_speed = RobotSpeed{.adv = 1, .side = 0, .rot = rotAngular};
 
-    float rotAngular = UmbralRot * angle;
-
-
-    if(std::abs(angle) < 0.1) {  // Ajusta el valor 0.1 según sea necesario
-        qInfo()<< "Cambiando";
-        robot_speed = RobotSpeed{.adv=1.0, .side=0, .rot=UmbralRot};
-    } else {
-        qInfo()<< "Cambiando 2";
-
-        robot_speed = RobotSpeed{.adv=0, .side=0, .rot=UmbralRot};
-    }
-
-    return std::make_tuple(state, robot_speed);
+    return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed); // Devuelve el estado STRAIGHT_LINE
 }
 
-
-
 std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::follow_wall(RoboCompLidar3D::TPoints &points){
+
+    //qInfo()<< "Estado FOLLOW_WALL";
 
     // Define los índices de inicio y fin para el rango lateral
     int start_offset_lat = points.size() / 6;
@@ -222,38 +181,56 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
     float rotAngular = UmbralRot * angle;
 
-    heVenido = true;
-
     if(lateral_distance < REFERENCE_DISTANCE - 100) {  // Si está demasiado cerca de la pared
         estado = Estado::STRAIGHT_LINE;
-        robot_speed = RobotSpeed{.adv=1, .side=0, .rot=rotAngular};
+        last_rotAngular = rotAngular;
+
+        robot_speed = RobotSpeed{.adv=2, .side=0, .rot=rotAngular};
     }
     else if(lateral_distance > REFERENCE_DISTANCE + 100) {  // Si está demasiado lejos de la pared
         estado = Estado::STRAIGHT_LINE;
-        robot_speed = RobotSpeed{.adv=1, .side=0, .rot=-rotAngular};
+        last_rotAngular = -rotAngular;
 
+        robot_speed = RobotSpeed{.adv=2, .side=0, .rot=-rotAngular};
     }
+
+
     else {  // Si está a una buena distancia de la pared
         estado = Estado::STRAIGHT_LINE;
-        robot_speed = RobotSpeed{.adv=1, .side=0, .rot=0};
+        robot_speed = RobotSpeed{.adv=2, .side=0, .rot=0};
+
+
+        if (interactions_follow_wall < 25) {
+            estado = Estado::STRAIGHT_LINE;
+
+            last_rotAngular = (last_rotAngular > 0) ? 3.0 : -3.0;
+
+
+            robot_speed = RobotSpeed{.adv=2, .side=0, .rot=last_rotAngular};
+        }
+        else{
+
+            if (interactions_follow_wall == 25){
+                qInfo() << "Hemos llegado a 11 iteracciones";
+                return std::make_tuple(estado, robot_speed);
+            }
+
+            interactions_follow_wall++;
+        }
+
     }
+
 
     return std::make_tuple(estado, robot_speed);
 }
 
+std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::straight_line(RoboCompLidar3D::TPoints &points)
+{
 
+    // qInfo() << "Estado STRAIGHT_LINE";
 
-
-
-
-
-
-
-
-std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::chocachoca(RoboCompLidar3D::TPoints &points) {
-
-
-    qInfo() << "Estado chocachoca";
+    static std::mt19937 gen(std::random_device{}());  // Generador de números aleatorios
+    static std::uniform_real_distribution<> dis(0, 1);  // Distribución uniforme entre 0 y 1
 
 
     //Sacamos los puntos mínimos.
@@ -264,165 +241,199 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::c
 
     RobotSpeed robot_speed;
 
-
+    Estado estado;
 
     const float MIN_DISTANCE = 600;
 
 
     if (std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE) {
-        qInfo() << "Too close to the wall - Avoiding";
+
+        //qInfo() << "Too close to the wall - Avoiding, We enter in the FOLLOW_WALL STATE";
 
         // Move away from the wall
 
-        robot_speed.adv = 0;
-        robot_speed.side = 0;
-        robot_speed.rot = 0;
+        robot_speed = RobotSpeed{.adv = 0, .side = 0, .rot = 0};
+
+        // Cambiamos a FOLLOW_WALL ya que no tenemos espacio libre.
 
         return std::make_tuple(Estado::FOLLOW_WALL, robot_speed);
-    } else {  // Continue moving forward
-        qInfo() << "Follow movement";
-        robot_speed.adv = 1.0;
-        robot_speed.side = 0;
-        robot_speed.rot = 0;
-        return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);  // Cambio aquí    }
-    }
 
-
-}
-
-
-
-
-std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::check_wall(RoboCompLidar3D::TPoints &points) {
-    qInfo() << "Estado check_wall";
-
-    // Identifica el punto más cercano en el rango frontal
-    int offset = points.size() / 2 - points.size() / 3;
-    auto min_elem = std::min_element(points.begin() + offset, points.end() - offset,
-                                     [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
-
-    const float MIN_DISTANCE = 600;
-
-
-
-    qInfo()<<"No venimos de follow wall";
-
-
-
-
-    if (std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE) {
-        qInfo() << "Too close to the wall - Avoiding";
-        return std::make_tuple(Estado::FOLLOW_WALL, RobotSpeed{0, 0, 0});
     } else {
-        // Generar un número aleatorio para decidir el próximo estado
-        std::mt19937 gen(std::random_device{}());
-        std::uniform_real_distribution<> distrib(0, 1.0);
-        float random_value = distrib(gen);
+        // Continue moving forward
 
-        if (!heVenido) {
+        //Modo debug
 
-            qInfo()<< "Vamos a spiral";
-            RobotSpeed robotSpeed;
-            heVenido = true;
-            return std::make_tuple(Estado::SPIRAL, robotSpeed);
+        if (DEBUG_MODE){
+            estado = Estado::STRAIGHT_LINE;
 
-        } else if (random_value < 0.66) {
-            qInfo()<<"Vamos a linea recta";
-            RobotSpeed robotSpeed;
+            robot_speed = RobotSpeed{.adv=2, .side=0, .rot=0};
 
-            robotSpeed.adv = 1.0;
-            robotSpeed.side = 0;
-            robotSpeed.rot = 0;
+            return std::make_tuple(estado, robot_speed);
 
-
-
-            return std::make_tuple(Estado::STRAIGHT_LINE, robotSpeed);
-        } else {
-
-            qInfo()<< "vamos al estado follow wall manteniendo los valores";
-            RobotSpeed robotSpeed;
-
-
-
-
-            return std::make_tuple(Estado::FOLLOW_WALL, robotSpeed);
         }
+
+        if (interactions_follow_wall == 25){
+
+            qInfo() << "Hemos llegado a 11 iteracciones";
+            interactions_follow_wall = 0;
+            estado = Estado::SPIRAL;
+            robot_speed = RobotSpeed{.adv=2, .side=0, .rot= last_rotAngular};
+
+            return std::make_tuple(estado, robot_speed);
+
+
+
+
+        }
+
+        if (interactions_follow_wall > 0)
+        {
+            qInfo() << "Vamos a follow wall";
+
+            estado = Estado::FOLLOW_WALL;
+            robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
+            return std::make_tuple(estado, robot_speed);
+        }
+
+
+        if (dosveces >= 10){
+            qInfo()<< "straight line otra vez con dos veces";
+            dosveces = 0;
+            interactions = 0;
+            float random = dis(gen);  // Número aleatorio entre 0 y 1
+
+            if (random < 0.5) {
+                // 50% de probabilidad de entrar aquí
+                float random_rot = dis(gen);  // Número aleatorio entre 0 y 1
+
+                // Decide la dirección de rotación aleatoriamente
+                random_rot = (dis(gen) < 0.5) ? 3 : -3;
+
+                estado = Estado::STRAIGHT_LINE;
+                robot_speed = RobotSpeed{.adv=2, .side=0, .rot=random_rot};
+            }
+            else {
+                estado = Estado::STRAIGHT_LINE;
+                robot_speed = RobotSpeed{.adv=2, .side=0, .rot=0};
+            }
+        }
+
+        if (interactions >= MAX_INTERACTIONS){
+
+            dosveces++;
+
+            qInfo()<< "straight line otra vez";
+            float random = dis(gen);  // Número aleatorio entre 0 y 1
+
+            if (random < 0.5) {
+                // 50% de probabilidad de entrar aquí
+                float random_rot = dis(gen);  // Número aleatorio entre 0 y 1
+                float max_rot = 1.0;  // Asume un valor máximo de rotación de 1.0 (ajústalo según sea necesario)
+                random_rot *= max_rot;  // Escala el valor aleatorio al rango de rotación máximo
+
+                // Decide la dirección de rotación aleatoriamente
+                random_rot = (dis(gen) < 0.5) ? 1 : -1;
+
+                estado = Estado::STRAIGHT_LINE;
+                robot_speed = RobotSpeed{.adv=2, .side=0, .rot=random_rot};
+            }
+            else {
+                estado = Estado::STRAIGHT_LINE;
+                robot_speed = RobotSpeed{.adv=2, .side=0, .rot=0};
+            }
+
+
+            return std::make_tuple(estado, robot_speed);
+
+
+        }
+
+
+        qInfo() << "Follow movement to SPIRAL";
+
+        robot_speed = RobotSpeed{.adv = 1.0, .side = 0, .rot = 0};
+        return std::make_tuple(Estado::SPIRAL, robot_speed);
     }
 }
 
+std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::spiral(RoboCompLidar3D::TPoints &points)
+{
 
+    qInfo() << "Estado SPIRAL";
 
+    static float SPIRAL_SPEED = 1.0;    // Velocidad de avance del robot
+    static float SPIRAL_ROTATION = 0.5; // Tasa de rotación inicial - esto determinará el tamaño de la espiral
+    static float INCREASE_RATE = 0.01;  // Tasa de incremento de la rotación para hacer espirales más cerradas
 
-//Este funciona
-std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::spiral(RoboCompLidar3D::TPoints &points){
-    qInfo()<<"Estado spiral funciona";
-    static float rot = 0.3;  // Inicialización de la rotación
-    static float adv = 1.0;  // Inicialización de la velocidad de avance
-    static float increase_rate = 0.01;  // Tasa de incremento de la rotación
-    static int spiral_iterations = 0;  // Contador de iteraciones en el estado SPIRAL
-    const int MAX_SPIRAL_ITERATIONS = 200;  // Número máximo de iteraciones en el estado SPIRAL
-
-    // Definir los índices para los rangos del lado derecho
-    int start_offset_right = points.size() / 6;
-    int end_offset_right =  (points.size() * 2) / 3;
-
-    // Encontrar el punto más cercano en los rangos del lado derecho
-    auto min_elem_right = std::min_element(points.begin() + start_offset_right, points.end() - end_offset_right,
-                                           [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
-
-    float angle = std::atan2(min_elem_right->y, min_elem_right->x);  // Calcula el ángulo del punto más cercano
-    float lateral_distance = std::hypot(min_elem_right->x, min_elem_right->y);  // Calcula la distancia lateral
+    const int MIN_DISTANCE = 600; // Distancia para considerar el cambio al estado FOLLOW_WALL
 
     RobotSpeed robot_speed;
-    Estado estado;
-    const float REFERENCE_DISTANCE = 900;  // Asume una distancia de referencia, ajusta según sea necesario
-    const float UmbralRot = 5.0;
 
-    float rotAngular = UmbralRot * angle;
-
-    // Incrementa el contador de iteraciones en el estado SPIRAL
-    spiral_iterations++;
-
-
-    int offset = points.size() / 2 - points.size() / 3;
+    int offset = points.size() / 2 - points.size() / 5;
     auto min_elem = std::min_element(points.begin() + offset, points.end() - offset,
-                                     [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
+                                     [](auto a, auto b)
+                                     { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
 
 
-    const float MIN_DISTANCE = 85;
-    // Use the function in your logic
+    if (std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE)
+    {
+        SPIRAL_ROTATION = 0.5; // Resetear la tasa de rotación
 
-    qInfo()<< "MIN es 85";
-
-    if (!isStraightWallStretch(points, MIN_DISTANCE, points.size() / 6)) {
-
-        robot_speed.adv = 0;
-        robot_speed.side = 0;
-        robot_speed.rot = 0;
-        heVenido = false;
+        robot_speed = RobotSpeed{.adv = 0, .side = 0, .rot = 0};
         return std::make_tuple(Estado::FOLLOW_WALL, robot_speed);
     }
+    else
+    {
 
-    qInfo() << spiral_iterations;
+        if (interactions >= MAX_INTERACTIONS) {
 
-    if(spiral_iterations >= MAX_SPIRAL_ITERATIONS) {
+            qInfo ()<<"Hemos superados las iteracciones de spiral";
 
-        heVenido = true;
-        // Si se alcanza el número máximo de iteraciones, cambia al estado CHECK_WALL
-        estado = Estado::STRAIGHT_LINE;
-        robot_speed = RobotSpeed{.adv=0, .side=0, .rot=0};  // Detén el robot antes de cambiar de estado
-        spiral_iterations = 0;  // Restablece el contador de iteraciones
-        return std::make_tuple(estado, robot_speed);
+            robot_speed = RobotSpeed{.adv = SPIRAL_SPEED, .side = 0, .rot = 0};
+            return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
+
+        }
+
+        robot_speed = RobotSpeed{.adv = SPIRAL_SPEED, .side = 0, .rot = SPIRAL_ROTATION};
+        SPIRAL_ROTATION += INCREASE_RATE; // Incrementar la tasa de rotación
+
+        interactions++;
+
+        //Devolvemos la tupla
+        return std::make_tuple(Estado::SPIRAL, robot_speed);
+    }
+}
+
+std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::move_to_center(RoboCompLidar3D::TPoints &points) {
+    int offset = points.size() / 2 - points.size() / 5;
+    auto min_elem = std::min_element(points.begin() + offset, points.end() - offset,
+                                     [](auto a, auto b) { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
+    RobotSpeed robot_speed;
+
+    static int i = 0;
+
+    if (std::hypot(min_elem->x, min_elem->y) < 600) {
+        robot_speed = RobotSpeed{.adv = 1.0, .side = 0, .rot = -1.0};
+
+
     }
 
-    // Incrementa la rotación en cada llamada a la función
-    rot += increase_rate;
+    if (i == 25) {
 
-    robot_speed = RobotSpeed{.adv = adv, .side = 0, .rot = rot};
+        i = 0;
 
-    return std::make_tuple(Estado::SPIRAL, robot_speed);
+        return std::make_tuple(Estado::SPIRAL, robot_speed);
 
 
+    }
+
+
+
+    robot_speed = RobotSpeed{.adv = 1.0, .side = 0, .rot = -1.0};
+
+    i++;
+    qInfo()<< i;
+    return std::make_tuple(Estado::MOVE_TO_CENTER, robot_speed);
 
 }
 
@@ -455,15 +466,32 @@ void SpecificWorker::draw_lidar(RoboCompLidar3D::TPoints &points, AbstractGraphi
 }
 
 
-// Define a function to check if there's a straight stretch of wall to follow
-bool SpecificWorker::isStraightWallStretch(const RoboCompLidar3D::TPoints &points, float min_distance,
-                                           int range_offset) {
-    for (int i = points.size() / 2 - range_offset; i < points.size() / 2 + range_offset; ++i) {
-        if (std::hypot(points[i].x, points[i].y) < min_distance) {
-            return false;  // A point too close to the robot found, not a straight stretch
+std::tuple<bool, bool> SpecificWorker::checkFreeSpace(RoboCompLidar3D::TPoints &points, float min_distance)
+{
+    if(points.empty()) return std::make_tuple(false, false);
+
+    float leftMinDistance = std::numeric_limits<float>::max();
+    float rightMinDistance = std::numeric_limits<float>::max();
+
+    for (size_t i = 0; i < points.size(); ++i)
+    {
+        float distance = std::hypot(points[i].x, points[i].y);
+        float angle = std::atan2(points[i].y, points[i].x);
+
+        if (angle > 0 && angle <= M_PI/2)  // Lado izquierdo
+        {
+            leftMinDistance = std::min(leftMinDistance, distance);
+        }
+        else if (angle >= -M_PI/2 && angle < 0)  // Lado derecho
+        {
+            rightMinDistance = std::min(rightMinDistance, distance);
         }
     }
-    return true;  // All points in the range are at a safe distance, it's a straight stretch
+
+    bool leftFree = (leftMinDistance > min_distance);
+    bool rightFree = (rightMinDistance > min_distance);
+
+    return std::make_tuple(leftFree, rightFree);
 }
 
 

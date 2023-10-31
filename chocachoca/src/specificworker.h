@@ -18,8 +18,8 @@
  */
 
 /**
-	\brief
-	@author authorname
+    \brief
+    @author authorname
 */
 
 #ifndef SPECIFICWORKER_H
@@ -37,8 +37,6 @@ public:
     ~SpecificWorker();
     bool setParams(RoboCompCommonBehavior::ParameterList params);
 
-
-
 public slots:
     void compute();
     int startup_check();
@@ -48,28 +46,31 @@ private:
     bool startup_check_flag;
     AbstractGraphicViewer *viewer;
 
-
-    //estructura de acoplamiento del robot
+    // estructura de acoplamiento del robot
 
     struct RobotSpeed
     {
-        float adv=0, side=0, rot=0;
+        float adv = 0, side = 0, rot = 0;
     };
 
     void draw_lidar(RoboCompLidar3D::TPoints &points, AbstractGraphicViewer *viewer);
 
-
     // Estados
-    enum class Estado { IDLE, FOLLOW_WALL, STRAIGHT_LINE, SPIRAL, TURN, CHECK_WALL};
-    Estado estado = Estado::SPIRAL;
+    enum class Estado
+    {
+        IDLE,
+        FOLLOW_WALL,
+        STRAIGHT_LINE,
+        SPIRAL,
+        MOVE_TO_CENTER
+    };
 
 
-    //Tuplas para acoplar los estados:
+    Estado estado = Estado::MOVE_TO_CENTER;
 
+    // Tuplas para acoplar los estados:
 
-    std::tuple<Estado, RobotSpeed> chocachoca(RoboCompLidar3D::TPoints &points);
-
-    bool heVenido = false;
+    std::tuple<Estado, RobotSpeed> straight_line(RoboCompLidar3D::TPoints &points);
 
     std::tuple<Estado, RobotSpeed> follow_wall(RoboCompLidar3D::TPoints &points);
 
@@ -77,11 +78,29 @@ private:
 
     std::tuple<Estado, RobotSpeed> spiral(RoboCompLidar3D::TPoints &points);
 
-    std::tuple<Estado, RobotSpeed> check_wall(RoboCompLidar3D::TPoints &points);
+    std::tuple<Estado, RobotSpeed> move_to_center(RoboCompLidar3D::TPoints &points);
 
-    bool isStraightWallStretch(const RoboCompLidar3D::TPoints &points, float min_distance, int range_offset);
+    // -1 para giros a la derecha, 1 para giros a la izquierda.
+    // Predefinido a -1 para que el robot gire a la derecha al principio.
+    int last_rotation_direction = -1;
 
 
+    float last_rotAngular = 0.0;
+
+
+    const int MAX_INTERACTIONS = 10;
+    int interactions = 0;
+
+    int dosveces = 0;
+
+    int interactions_follow_wall = 0;
+
+    bool DEBUG_MODE = false;
+
+
+
+
+    std::tuple<bool, bool> checkFreeSpace(RoboCompLidar3D::TPoints &points, float min_distance);
 
 
 };
