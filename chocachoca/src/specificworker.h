@@ -84,7 +84,7 @@ private:
     float last_rotAngular = 0.0;
 
 
-    float REFERENCE_DISTANCE = 900;  // Asume una distancia de referencia.
+    float REFERENCE_DISTANCE = 2500;  // Asume una distancia de referencia.
 
 
     const int MIN_DISTANCE = 600; // Distancia minima para que el robot se pare

@@ -241,6 +241,13 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     Estado estado;
 
 
+    // Calculate the distance from the robot to the nearest point on the wall
+    float distance_to_wall = std::hypot(min_elem->x, min_elem->y);
+
+
+
+    qInfo () << "Threshold is: "<< REFERENCE_DISTANCE;
+
     if (std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE)
     {
 
@@ -248,7 +255,11 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
         // Move away from the wall
 
-        REFERENCE_DISTANCE = 900;
+    // Si está demasiado cerca de la pared, cambia a FOLLOW_WALL y reduce la REFERENCE_DISTANCE en 100
+        REFERENCE_DISTANCE -= 100;
+        if (REFERENCE_DISTANCE <= 900) {
+            REFERENCE_DISTANCE = 900;  // Establece un límite mínimo
+        }
 
 
 
@@ -260,7 +271,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     }
 
     // Si ya tenemos la distancia de referencia a 900, cambiamos a SPIRAL a veces.
-    if (std::hypot(min_elem->x, min_elem->y) > 900) {
+    if (std::hypot(min_elem->x, min_elem->y) > REFERENCE_DISTANCE) {
 
         qInfo()<< "segundo if";
 
