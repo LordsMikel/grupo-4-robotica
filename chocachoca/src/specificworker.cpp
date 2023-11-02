@@ -152,6 +152,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
     const float UmbralRot = 5.0;
 
+    static int i = 0;
 
 
 
@@ -203,22 +204,32 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
         // Si entramos aquí haremos que todo lo haga el 20% de las veces
 
-        if (dis(gen) < 0.3 && std::hypot(min_elem->x, min_elem->y) >= 900) {
-
-            qInfo()<< "Entramos en random en follow wall";
-
-            qInfo() << "Buenas:   " << last_rotAngular;
-
-            change = true;
-
-            omnirobot_proxy->setSpeedBase(2.0, 0, last_rotAngular);
+        qInfo() << "Distancia hipotenusa en follow wall" <<  std::hypot(min_elem->x, min_elem->y);
 
 
-            robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = last_rotAngular};
+        if (i != 0) {
 
-            // Cambiamos a SPIRAL
-            return std::make_tuple(Estado::SPIRAL, robot_speed);
+            qInfo() << "Distancia hipotenusa en follow wall" <<  std::hypot(min_elem->x, min_elem->y);
+
+            if (dis(gen) < 0.5) {
+                qInfo() << "Ahora straight line si se cumple el random";
+
+                qInfo() << "Entramos en random en follow wall";
+
+                qInfo() << "Buenas:   " << last_rotAngular;
+
+
+                omnirobot_proxy->setSpeedBase(2.0, 0, last_rotAngular);
+
+
+                robot_speed = RobotSpeed{.adv = 1.0, .side = 0, .rot = 0};
+
+                // NOTA antes se cambiaba a SPIRAL
+                return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
+            }
         }
+        else i = 1;
+
 
 
 
@@ -259,6 +270,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
     qInfo () << "Threshold is: "<< REFERENCE_DISTANCE;
 
+        // Para ponerlo al centro
         if (std::hypot(min_elem->x, min_elem->y) >= 1000) {
 
             qInfo() << "primer if,  " << "Distancia" << std::hypot(min_elem->x, min_elem->y);
@@ -275,16 +287,18 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
                 omnirobot_proxy->setSpeedBase(2, 0, last_rotAngular);
 
-                robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
+                robot_speed = RobotSpeed{.adv = 1, .side = 0, .rot = 0};
 
                 i = 1;
 
                 return std::make_tuple(Estado::SPIRAL, robot_speed);
             }
 
-            omnirobot_proxy->setSpeedBase(2, 0, 0);
 
-            robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
+
+            omnirobot_proxy->setSpeedBase(2, 0, last_rotAngular);
+
+            robot_speed = RobotSpeed{.adv = 1, .side = 0, .rot = 0};
 
             return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
 
@@ -292,7 +306,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
 
 
-    if (std::hypot(min_elem->x, min_elem->y) >= 900) {
+    if (std::hypot(min_elem->x, min_elem->y) >= REFERENCE_DISTANCE) {
 
         qInfo() << "el if con 900,  " << "Distancia" << std::hypot(min_elem->x, min_elem->y);
 
@@ -306,14 +320,16 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
             qInfo() << DEBUG_MODE;
 
 
-            robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = last_rotAngular};
+
+
+            robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
 
 
             return std::make_tuple(Estado::SPIRAL, robot_speed);
         }
 
 
-        robot_speed = RobotSpeed{.adv = 2.0, .side = 0, .rot = last_rotAngular};
+        robot_speed = RobotSpeed{.adv = 1 , .side = 0, .rot = 0};
 
         return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
 
@@ -337,19 +353,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
 
 
-
-
-//        // con dis(gen) < 0.2 tenemos un 20% de probabilidad de entrar en SPIRAL
-//        if (dis(gen) < 0.2)
-//        {
-//            // Cambiamos a SPIRAL
-//            qInfo() << "Cambio a SPIRAL";
-//            qInfo() << "La distancia de referencia es: " << REFERENCE_DISTANCE;
-//            qInfo() << "La distancia del punto más cercano es: " << std::hypot(min_elem->x, min_elem->y);
-//            qInfo() << DEBUG_MODE;
-//
-//            return std::make_tuple(Estado::SPIRAL, robot_speed);
-//        }
 
         robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
 
@@ -381,6 +384,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
         SPIRAL_ROTATION = 1.0;
         SPIRAL_SPEED = 2.0;
 
+        MAX_INTERACTIONS = 400;
 
         change = false;
 
@@ -402,6 +406,8 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
         SPIRAL_SPEED = 1.0;
 
+        MAX_INTERACTIONS = 200;
+
         clockwise = !clockwise; // Invert the spiral direction
 
         qInfo() << "Espiral a FOLLOW WALL";
@@ -420,6 +426,8 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
             SPIRAL_SPEED = 1.0;
 
             SPIRAL_ROTATION = 0.5;  // Reset rotation rate
+
+            MAX_INTERACTIONS = 200;
 
             clockwise = !clockwise; // Invert the spiral direction
 

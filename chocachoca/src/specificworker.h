@@ -94,6 +94,7 @@ private:
 
     bool change = false;
 
+
     int interactions = 0;
 
     bool DEBUG_MODE = false;
