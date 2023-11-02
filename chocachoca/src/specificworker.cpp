@@ -171,7 +171,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
             //si no funciona ponlo como rotAngular
 
-            robot_speed = RobotSpeed{.adv = 1, .side = 0, .rot = last_rotAngular};
+            robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = last_rotAngular};
         }
         else if (lateral_distance > REFERENCE_DISTANCE + 100) {
             estado = Estado::STRAIGHT_LINE;
@@ -179,7 +179,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
             //si no funciona ponlo como rotAngular
 
-            robot_speed = RobotSpeed{.adv = 1, .side = 0, .rot = last_rotAngular};
+            robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = last_rotAngular};
         }
         else {
 
@@ -188,7 +188,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
         estado = Estado::STRAIGHT_LINE;
         robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
 
-        front_distance = true;
 
 
         //Podríamos entrar a espiral a veces!!!
@@ -205,6 +204,9 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
 
             if (dis(gen) < 0.2) {
+
+                qInfo()<< "Entramos en random";
+
                 qInfo() << "Buenas:   " << last_rotAngular;
 
                 omnirobot_proxy->setSpeedBase(2.0, 0, last_rotAngular);
@@ -264,12 +266,14 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
 
 
-        robot_speed = RobotSpeed{.adv = 2.0, .side = 0, .rot = last_rotAngular};
+        omnirobot_proxy->setSpeedBase(2,0,0);
+
+        robot_speed = RobotSpeed{.adv = 2.0, .side = 0, .rot = 0};
 
 
 
-        // con dis(gen) < 0.1 tenemos un 10% de probabilidad de entrar en SPIRAL
-        if (dis(gen) < 0.1)
+        // con dis(gen) < 0.2 tenemos un 20% de probabilidad de entrar en SPIRAL
+        if (dis(gen) < 0.2)
         {
             // Cambiamos a SPIRAL
             qInfo() << "Cambio a SPIRAL";
@@ -300,6 +304,9 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     static float INCREASE_RATE = 0.01;  // Tasa de incremento de la rotación
     static bool clockwise = true;       // Dirección de la espiral (true para horario, false para antihorario)
 
+
+
+
     RobotSpeed robot_speed;
 
     int offset = points.size() / 2 - points.size() / 5;
@@ -315,11 +322,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
         qInfo() << "Espiral a FOLLOW WALL";
 
-        front_distance = false;
-
-        reset = true;
-
-        REFERENCE_DISTANCE = 900;
 
         return std::make_tuple(Estado::FOLLOW_WALL, RobotSpeed{.adv = 0, .side = 0, .rot = 0});
     }
@@ -330,11 +332,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
             interactions = 0;
 
             SPIRAL_ROTATION = 0.5;  // Reset rotation rate
-
-            front_distance = true;
-
-            REFERENCE_DISTANCE = 900;
-
 
             clockwise = !clockwise; // Invert the spiral direction
 
@@ -365,7 +362,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::m
         robot_speed = RobotSpeed{.adv = 1.0, .side = 0, .rot = -1.0};
     }
 
-    if (i == 25)
+    if (i == 5)
     {
 
         i = 0;
