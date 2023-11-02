@@ -66,7 +66,7 @@ private:
     };
 
 
-    Estado estado = Estado::STRAIGHT_LINE;
+    Estado estado = Estado::SPIRAL;
 
     // Tuplas para acoplar los estados:
 
@@ -92,7 +92,7 @@ private:
     int MAX_INTERACTIONS = 200;
 
 
-    bool reset = false;
+    bool change = false;
 
     int interactions = 0;
 

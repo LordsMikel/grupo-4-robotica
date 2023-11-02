@@ -68,7 +68,7 @@ include src/CMakeFiles/chocachoca_autogen.dir/progress.make
 
 src/CMakeFiles/chocachoca_autogen:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target chocachoca"
-	cd /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src && /usr/bin/cmake -E cmake_autogen /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/CMakeFiles/chocachoca_autogen.dir/AutogenInfo.json ""
+	cd /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src && /usr/bin/cmake -E cmake_autogen /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/CMakeFiles/chocachoca_autogen.dir/AutogenInfo.json Debug
 
 chocachoca_autogen: src/CMakeFiles/chocachoca_autogen
 chocachoca_autogen: src/CMakeFiles/chocachoca_autogen.dir/build.make
