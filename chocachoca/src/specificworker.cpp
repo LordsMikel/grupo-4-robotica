@@ -110,11 +110,6 @@ void SpecificWorker::compute()
             res = spiral(filtered_points);
             break;
         }
-        case Estado::MOVE_TO_CENTER:
-        {
-            res = move_to_center(filtered_points);
-            break;
-        }
     }
 
     // Desempaquetamos la tupla.
@@ -190,6 +185,13 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
 
 
+        int offset = points.size() / 2 - points.size() / 3;
+        auto min_elem = std::min_element(points.begin() + offset, points.end() - offset,
+                                         [](auto a, auto b)
+                                         { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
+
+
+
         //Podríamos entrar a espiral a veces!!!
 
 
@@ -201,6 +203,22 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
         // Si entramos aquí haremos que todo lo haga el 20% de las veces
 
+        if (dis(gen) < 0.3 && std::hypot(min_elem->x, min_elem->y) >= 900) {
+
+            qInfo()<< "Entramos en random en follow wall";
+
+            qInfo() << "Buenas:   " << last_rotAngular;
+
+            change = true;
+
+            omnirobot_proxy->setSpeedBase(2.0, 0, last_rotAngular);
+
+
+            robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = last_rotAngular};
+
+            // Cambiamos a SPIRAL
+            return std::make_tuple(Estado::SPIRAL, robot_speed);
+        }
 
 
 
@@ -417,35 +435,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     }
 }
 
-std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::move_to_center(RoboCompLidar3D::TPoints &points)
-{
-    int offset = points.size() / 2 - points.size() / 5;
-    auto min_elem = std::min_element(points.begin() + offset, points.end() - offset,
-                                     [](auto a, auto b)
-                                     { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
-    RobotSpeed robot_speed;
-
-    static int i = 0;
-
-    if (std::hypot(min_elem->x, min_elem->y) < 600)
-    {
-        robot_speed = RobotSpeed{.adv = 1.0, .side = 0, .rot = -1.0};
-    }
-
-    if (i == 5)
-    {
-
-        i = 0;
-
-        return std::make_tuple(Estado::SPIRAL, robot_speed);
-    }
-
-    robot_speed = RobotSpeed{.adv = 1.0, .side = 0, .rot = -1.0};
-
-    i++;
-    qInfo() << i;
-    return std::make_tuple(Estado::MOVE_TO_CENTER, robot_speed);
-}
 
 int SpecificWorker::startup_check()
 {

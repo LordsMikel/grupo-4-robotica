@@ -61,8 +61,8 @@ private:
         IDLE,
         FOLLOW_WALL,
         STRAIGHT_LINE,
-        SPIRAL,
-        MOVE_TO_CENTER
+        SPIRAL
+
     };
 
 
