@@ -155,7 +155,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
     RobotSpeed robot_speed;
     Estado estado;
 
-    const float UmbralRot = 7.0;
+    const float UmbralRot = 5.0;
 
 
 
@@ -164,24 +164,24 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
     qInfo()<< "La distancia de referencia es: " << REFERENCE_DISTANCE;
 
-        if (lateral_distance < REFERENCE_DISTANCE - 100) {
-         // Si está demasiado cerca de la pared
-            estado = Estado::STRAIGHT_LINE;
-            last_rotAngular = rotAngular;
+    if (lateral_distance < REFERENCE_DISTANCE - 100) {
+        // Si está demasiado cerca de la pared
+        estado = Estado::STRAIGHT_LINE;
+        last_rotAngular = rotAngular;
 
-            //si no funciona ponlo como rotAngular
+        //si no funciona ponlo como rotAngular
 
-            robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = last_rotAngular};
-        }
-        else if (lateral_distance > REFERENCE_DISTANCE + 100) {
-            estado = Estado::STRAIGHT_LINE;
-            last_rotAngular = -rotAngular;
+        robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = last_rotAngular};
+    }
+    else if (lateral_distance > REFERENCE_DISTANCE + 100) {
+        estado = Estado::STRAIGHT_LINE;
+        last_rotAngular = -rotAngular;
 
-            //si no funciona ponlo como rotAngular
+        //si no funciona ponlo como rotAngular
 
-            robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = last_rotAngular};
-        }
-        else {
+        robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = last_rotAngular};
+    }
+    else {
 
         // Si está a una buena distancia de la pared
 
@@ -195,25 +195,25 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
 
 
-            // utilizamos setSpeedBase para que el robot gire con last_rotAngular
-            // Al utiliza omnirobot_proxy->setSpeedBase(adv, side, rot) el robot gira con rot
-            // Y nos ahorramos un estado TURN.
+        // utilizamos setSpeedBase para que el robot gire con last_rotAngular
+        // Al utiliza omnirobot_proxy->setSpeedBase(adv, side, rot) el robot gira con rot
+        // Y nos ahorramos un estado TURN.
 
-            // Si entramos aquí haremos que todo lo haga el 20% de las veces
+        // Si entramos aquí haremos que todo lo haga el 20% de las veces
 
 
+
+//        if (dis(gen) < 0.2) {
 //
-//            if (dis(gen) < 0.2) {
+//            qInfo()<< "Entramos en random";
 //
-//                qInfo()<< "Entramos en random";
+//            qInfo() << "Buenas:   " << last_rotAngular;
 //
-//                qInfo() << "Buenas:   " << last_rotAngular;
+//            omnirobot_proxy->setSpeedBase(2.0, 0, last_rotAngular);
 //
-//                omnirobot_proxy->setSpeedBase(2.0, 0, last_rotAngular);
-//
-//                // Cambiamos a SPIRAL
-//                return std::make_tuple(Estado::SPIRAL, robot_speed);
-//            }
+//            // Cambiamos a SPIRAL
+//            return std::make_tuple(Estado::SPIRAL, robot_speed);
+//        }
 
 
     }
@@ -229,6 +229,8 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     static std::mt19937 gen(std::random_device{}());   // Generador de números aleatorios
     static std::uniform_real_distribution<> dis(0, 1); // Distribución uniforme entre 0 y 1
 
+    static int i = 0;
+
     // Sacamos los puntos mínimos.
 
     int offset = points.size() / 2 - points.size() / 3;
@@ -238,10 +240,8 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
     RobotSpeed robot_speed;
 
-    Estado estado = Estado::STRAIGHT_LINE;
+    Estado estado;
 
-    static int i = 0;
-    static int stop = 0;
 
     // Calculate the distance from the robot to the nearest point on the wall
     float distance_to_wall = std::hypot(min_elem->x, min_elem->y);
@@ -250,6 +250,32 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
     qInfo () << "Threshold is: "<< REFERENCE_DISTANCE;
 
+        if (std::hypot(min_elem->x, min_elem->y) >= 1000 && std::hypot(min_elem->x, min_elem->y) > MIN_DISTANCE) {
+
+            qInfo() << "primer if,  " << "Distancia" << std::hypot(min_elem->x, min_elem->y);
+
+            omnirobot_proxy->setSpeedBase(2, 0, 0);
+
+            if (dis(gen) < 0.2) {
+                // Cambiamos a SPIRAL
+                qInfo() << "Cambio a SPIRAL";
+                qInfo() << "La distancia de referencia es: " << REFERENCE_DISTANCE;
+                qInfo() << "La distancia del punto más cercano es: " << std::hypot(min_elem->x, min_elem->y);
+                qInfo() << DEBUG_MODE;
+                robot_speed = RobotSpeed{.adv = 2.0, .side = 0, .rot = last_rotAngular};
+
+                i++;
+
+                return std::make_tuple(Estado::SPIRAL, robot_speed);
+            }
+            robot_speed = RobotSpeed{.adv = 2.0, .side = 0, .rot = 0};
+
+            return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
+
+        }
+
+
+
     if (std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE)
     {
 
@@ -257,10 +283,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
         // Move away from the wall
 
-    // Si está demasiado cerca de la pared, cambia a FOLLOW_WALL y reduce la REFERENCE_DISTANCE en 100
-        if (stop != 1) {
-            REFERENCE_DISTANCE += 100;
-        }
+
 
 
         robot_speed = RobotSpeed{.adv = 0, .side = 0, .rot = 0};
@@ -273,55 +296,22 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     // Si ya tenemos la distancia de referencia a 900, cambiamos a SPIRAL a veces.
     if (std::hypot(min_elem->x, min_elem->y) > REFERENCE_DISTANCE) {
 
-        qInfo() << "segundo if";
-        if (stop != -1) {
-            REFERENCE_DISTANCE += 100;
-        }
-
-        //omnirobot_proxy->setSpeedBase(2,0,0);
-
-        robot_speed = RobotSpeed{.adv = 2.0, .side = 0, .rot = 0};
-        return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
+        qInfo()<< "segundo if";
 
 
 
-    }
-    else{
-        qInfo() << "tercer if";
-
-
-        i++;
-
-        qInfo()<< "Valor de la i" << i;
-
-        if (i == 100 && REFERENCE_DISTANCE == 2500 && stop != -1){
-
-            REFERENCE_DISTANCE = 900;
-
-            stop = -1;
-
-            i = 0;
-
-        }
-
-        if (i == 100 && stop != -1) {
-
-            REFERENCE_DISTANCE += 100;
-
-            i = 0;
-
-        }
+        omnirobot_proxy->setSpeedBase(2,0,0);
 
         robot_speed = RobotSpeed{.adv = 2.0, .side = 0, .rot = 0};
 
-        // Cambiamos a FOLLOW_WALL ya que no tenemos espacio libre.
+        if (dis(gen) < 0.2)
 
-        return std::make_tuple(Estado::FOLLOW_WALL, robot_speed);
+        {
+            robot_speed = RobotSpeed{.adv = 2.0, .side = 0, .rot = last_rotAngular};
+            return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
+        }
 
-    }
 
-
-//
 //        // con dis(gen) < 0.2 tenemos un 20% de probabilidad de entrar en SPIRAL
 //        if (dis(gen) < 0.2)
 //        {
@@ -333,11 +323,11 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 //
 //            return std::make_tuple(Estado::SPIRAL, robot_speed);
 //        }
-//
-//        return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
-//
-//
-//    }
+
+        return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
+
+
+    }
 
 
 
