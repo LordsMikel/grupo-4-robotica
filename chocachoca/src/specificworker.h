@@ -66,7 +66,7 @@ private:
     };
 
 
-    Estado estado = Estado::MOVE_TO_CENTER;
+    Estado estado = Estado::SPIRAL;
 
     // Tuplas para acoplar los estados:
 
@@ -74,33 +74,36 @@ private:
 
     std::tuple<Estado, RobotSpeed> follow_wall(RoboCompLidar3D::TPoints &points);
 
-    std::tuple<Estado, RobotSpeed> turn(RoboCompLidar3D::TPoints &points);
 
     std::tuple<Estado, RobotSpeed> spiral(RoboCompLidar3D::TPoints &points);
 
     std::tuple<Estado, RobotSpeed> move_to_center(RoboCompLidar3D::TPoints &points);
 
-    // -1 para giros a la derecha, 1 para giros a la izquierda.
-    // Predefinido a -1 para que el robot gire a la derecha al principio.
-    int last_rotation_direction = -1;
 
 
     float last_rotAngular = 0.0;
 
 
-    const int MAX_INTERACTIONS = 10;
+    float REFERENCE_DISTANCE = 900;  // Asume una distancia de referencia.
+
+
+    const int MIN_DISTANCE = 600; // Distancia minima para que el robot se pare
+
+    int MAX_INTERACTIONS = 200;
+
+
+    bool reset = false;
+
     int interactions = 0;
-
-    int dosveces = 0;
-
-    int interactions_follow_wall = 0;
 
     bool DEBUG_MODE = false;
 
+    //Creamos un booleano si el robot su distancia frontal es mayor que la REFERENCE_DISTANCE
+    bool front_distance = false;
 
 
 
-    std::tuple<bool, bool> checkFreeSpace(RoboCompLidar3D::TPoints &points, float min_distance);
+
 
 
 };
