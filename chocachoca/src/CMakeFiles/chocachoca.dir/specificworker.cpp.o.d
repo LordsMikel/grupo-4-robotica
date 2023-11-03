@@ -1,9 +1,9 @@
 src/CMakeFiles/chocachoca.dir/specificworker.cpp.o: \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/specificworker.cpp \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/specificworker.cpp \
  /usr/include/stdc-predef.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/specificworker.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/genericworker.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/specificworker.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/genericworker.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -20,7 +20,7 @@ src/CMakeFiles/chocachoca.dir/specificworker.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /home/robocomp/robocomp/classes/qlog/qlog.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QtCore \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QtCoreDepends \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h \
@@ -1084,7 +1084,7 @@ src/CMakeFiles/chocachoca.dir/specificworker.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qvectornd.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qwindowdefs.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtguiversion.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/ui_mainUI.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/ui_mainUI.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qapplication.h \
@@ -1093,7 +1093,7 @@ src/CMakeFiles/chocachoca.dir/specificworker.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsizepolicy.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.h \
  /usr/include/IceUtil/PushDisableWarnings.h /usr/include/Ice/ProxyF.h \
  /usr/include/Ice/Config.h /usr/include/IceUtil/Config.h \
  /usr/include/c++/11/cassert /usr/include/Ice/ProxyHandle.h \
@@ -1136,9 +1136,9 @@ src/CMakeFiles/chocachoca.dir/specificworker.cpp.o: \
  /usr/include/c++/11/deque /usr/include/c++/11/bits/stl_deque.h \
  /usr/include/c++/11/bits/deque.tcc /usr/include/Ice/FactoryTableInit.h \
  /usr/include/Ice/DefaultValueFactory.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.h \
  /home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGraphicsScene \

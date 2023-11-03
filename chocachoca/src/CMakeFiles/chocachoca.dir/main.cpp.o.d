@@ -1,5 +1,5 @@
 src/CMakeFiles/chocachoca.dir/main.cpp.o: \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/main.cpp \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/main.cpp \
  /usr/include/stdc-predef.h /usr/include/signal.h /usr/include/features.h \
  /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -1156,7 +1156,7 @@ src/CMakeFiles/chocachoca.dir/main.cpp.o: \
  /home/robocomp/robocomp/classes/sigwatch/sigwatch.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QObject \
  /home/robocomp/robocomp/classes/qlog/qlog.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
  /usr/include/boost/format.hpp /usr/include/boost/detail/workaround.hpp \
  /usr/include/boost/config/workaround.hpp /usr/include/boost/config.hpp \
  /usr/include/boost/config/user.hpp \
@@ -1356,19 +1356,19 @@ src/CMakeFiles/chocachoca.dir/main.cpp.o: \
  /usr/include/boost/format/parsing.hpp \
  /usr/include/boost/format/free_funcs.hpp \
  /usr/include/boost/format/detail/unset_macros.hpp \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/genericmonitor.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/genericworker.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/genericmonitor.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/genericworker.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QtGui \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/ui_mainUI.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/ui_mainUI.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/specificworker.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/genericworker.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/specificworker.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/genericworker.h \
  /home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGraphicsScene \
@@ -1383,5 +1383,5 @@ src/CMakeFiles/chocachoca.dir/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QVBoxLayout \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGraphicsPolygonItem \
  /usr/include/c++/11/ranges \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/specificmonitor.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/commonbehaviorI.h
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/specificmonitor.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/commonbehaviorI.h

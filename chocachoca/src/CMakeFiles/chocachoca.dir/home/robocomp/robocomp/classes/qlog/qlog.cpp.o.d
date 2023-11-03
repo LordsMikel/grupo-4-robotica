@@ -1,7 +1,7 @@
 src/CMakeFiles/chocachoca.dir/home/robocomp/robocomp/classes/qlog/qlog.cpp.o: \
  /home/robocomp/robocomp/classes/qlog/qlog.cpp /usr/include/stdc-predef.h \
  /home/robocomp/robocomp/classes/qlog/qlog.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QtCore \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QtCoreDepends \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h \

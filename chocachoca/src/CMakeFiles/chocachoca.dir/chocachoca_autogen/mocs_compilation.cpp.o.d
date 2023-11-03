@@ -1,7 +1,7 @@
 src/CMakeFiles/chocachoca.dir/chocachoca_autogen/mocs_compilation.cpp.o: \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/mocs_compilation.cpp \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/mocs_compilation.cpp \
  /usr/include/stdc-predef.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/AF5EVGCUJC/moc_abstract_graphic_viewer.cpp \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/JPJZV43UZ7/moc_abstract_graphic_viewer.cpp \
  /usr/include/c++/11/memory /usr/include/c++/11/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -206,7 +206,7 @@ src/CMakeFiles/chocachoca.dir/chocachoca_autogen/mocs_compilation.cpp.o: \
  /usr/include/c++/11/bits/uses_allocator_args.h \
  /usr/include/c++/11/pstl/glue_memory_defs.h \
  /usr/include/c++/11/pstl/execution_defs.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/../../../../../../../../robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/JPJZV43UZ7/../../../../../../classes/abstract_graphic_viewer/abstract_graphic_viewer.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -433,8 +433,8 @@ src/CMakeFiles/chocachoca.dir/chocachoca_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qpainterpath.h \
  /usr/include/c++/11/iostream /usr/include/c++/11/istream \
  /usr/include/c++/11/bits/istream.tcc \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_genericmonitor.cpp \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../genericmonitor.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_genericmonitor.cpp \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../genericmonitor.h \
  /usr/include/Ice/Ice.h /usr/include/IceUtil/PushDisableWarnings.h \
  /usr/include/Ice/Config.h /usr/include/IceUtil/Config.h \
  /usr/include/c++/11/cassert /usr/include/c++/11/sstream \
@@ -845,10 +845,10 @@ src/CMakeFiles/chocachoca.dir/chocachoca_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qwineventnotifier.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qxmlstream.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qtcoreversion.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../genericworker.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../config.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../genericworker.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../config.h \
  /home/robocomp/robocomp/classes/qlog/qlog.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/config.h \
  /usr/include/boost/format.hpp /usr/include/boost/detail/workaround.hpp \
  /usr/include/boost/config/workaround.hpp /usr/include/boost/config.hpp \
  /usr/include/boost/config/user.hpp \
@@ -1189,21 +1189,21 @@ src/CMakeFiles/chocachoca.dir/chocachoca_autogen/mocs_compilation.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qvectornd.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qwindowdefs.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/qtguiversion.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/ui_mainUI.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/ui_mainUI.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/OmniRobot.h \
  /usr/include/x86_64-linux-gnu/qt6/QtGui/QScreen \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_genericworker.cpp \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../genericworker.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_specificmonitor.cpp \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../specificmonitor.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../genericmonitor.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_specificworker.cpp \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../specificworker.h \
- /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/genericworker.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_genericworker.cpp \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../genericworker.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_specificmonitor.cpp \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../specificmonitor.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../genericmonitor.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_specificworker.cpp \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/../../specificworker.h \
+ /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/genericworker.h \
  /home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.h \
  /usr/include/c++/11/ranges

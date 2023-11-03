@@ -1,5 +1,5 @@
-/home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_genericmonitor.cpp: /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/genericmonitor.h \
-  /home/usuario/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/moc_predefs.h \
+/home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/EWIEGA46WW/moc_genericmonitor.cpp: /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/genericmonitor.h \
+  /home/robocomp/robocomp/components/grupo-4-robotica/chocachoca/src/chocachoca_autogen/moc_predefs.h \
   /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/chocachoca/src/CommonBehavior.h \
   /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/chocachoca/src/GenericBase.h \
   /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/chocachoca/src/Lidar3D.h \
