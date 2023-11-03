@@ -206,29 +206,33 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
         qInfo() << "Distancia hipotenusa en follow wall" <<  lateral_distance;
 
+        qInfo() << "Valor de la i en follow wall:  " << i;
 
-        if (i != 0) {
+        if (i == 10) {
 
             qInfo() << "Distancia hipotenusa en follow wall" <<  std::hypot(min_elem->x, min_elem->y);
 
-            if (dis(gen) < 0.5) {
-                qInfo() << "Ahora straight line si se cumple el random";
 
-                qInfo() << "Entramos en random en follow wall";
+                qInfo() << "Entramos en follow wall con last_rotAngular";
 
                 qInfo() << "Buenas:   " << last_rotAngular;
 
+                float rot = (last_rotAngular > 0) ? 3.0 : -3.0;
 
-                omnirobot_proxy->setSpeedBase(2.0, 0, last_rotAngular);
 
 
-                robot_speed = RobotSpeed{.adv = 1.0, .side = 0, .rot = 0};
+                robot_speed = RobotSpeed{.adv = 2.0, .side = 0, .rot = rot};
+
+
+                i = 0;
 
                 // NOTA antes se cambiaba a SPIRAL
                 return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
-            }
+
+
+
         }
-        //else i = 1;
+        else i++;
 
 
 
@@ -273,7 +277,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     qInfo () << "La distancia a la pared en st es: " << distance_to_wall;
 
     // Para ponerlo al centro
-    if (std::hypot(min_elem->x, min_elem->y) >= 1000) {
+    if (std::hypot(min_elem->x, min_elem->y) >= 1000 && i != 1) {
 
         qInfo() << "primer if,  " << "Distancia" << std::hypot(min_elem->x, min_elem->y);
 
@@ -298,7 +302,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
 
 
-        omnirobot_proxy->setSpeedBase(2, 0, last_rotAngular);
+        omnirobot_proxy->setSpeedBase(2, 0, 0);
 
         robot_speed = RobotSpeed{.adv = 1, .side = 0, .rot = 0};
 
@@ -308,13 +312,13 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
 
 
-    if (std::hypot(min_elem->x, min_elem->y) >= REFERENCE_DISTANCE) {
+    if (std::hypot(min_elem->x, min_elem->y) >= 2000) {
 
-        qInfo() << "el if con 900,  " << "Distancia" << std::hypot(min_elem->x, min_elem->y);
+        qInfo() << "el if con 2000,  " << "Distancia" << std::hypot(min_elem->x, min_elem->y);
 
-        omnirobot_proxy->setSpeedBase(2, 0, last_rotAngular);
+        omnirobot_proxy->setSpeedBase(2, 0, 0);
 
-        if (dis(gen) < 0.3) {
+        if (dis(gen) < 0.2) {
             // Cambiamos a SPIRAL
             qInfo() << "Cambio a SPIRAL";
             qInfo() << "La distancia de referencia es: " << REFERENCE_DISTANCE;
@@ -405,7 +409,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
     if (SPIRAL_SPEED == 2.0) {
 
-        MIN = 200;
+        MIN = 85;
 
     }
     else
