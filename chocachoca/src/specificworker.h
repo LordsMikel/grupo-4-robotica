@@ -89,11 +89,18 @@ private:
 
     const int MIN_DISTANCE = 600; // Distancia minima para que el robot se pare
 
+
+
     int MAX_INTERACTIONS = 200;
 
 
     bool change = false;
 
+
+    bool reset = false;
+
+
+    
 
     int interactions = 0;
 
