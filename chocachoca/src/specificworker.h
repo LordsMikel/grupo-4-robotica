@@ -87,7 +87,7 @@ private:
     float REFERENCE_DISTANCE = 900;  // Asume una distancia de referencia.
 
 
-    const int MIN_DISTANCE = 600; // Distancia minima para que el robot se pare
+    const int MIN_DISTANCE = 700; // Distancia minima para que el robot se pare
 
 
 
@@ -100,11 +100,15 @@ private:
     bool reset = false;
 
 
-    
+    bool cambio = false;
+
+
 
     int interactions = 0;
 
     bool DEBUG_MODE = false;
+
+    bool hemosvenido = false;
 
     //Creamos un booleano si el robot su distancia frontal es mayor que la REFERENCE_DISTANCE
     bool front_distance = false;
