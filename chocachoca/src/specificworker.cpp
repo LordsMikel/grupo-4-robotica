@@ -271,8 +271,10 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
             robot_speed = RobotSpeed{.adv = 1, .side = 0, .rot = 0};
 
-            i = 2;
-
+            if (i == 1) {
+                i = 2;
+            }
+            
             return std::make_tuple(Estado::SPIRAL, robot_speed);
         }
 
