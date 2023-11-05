@@ -99,7 +99,7 @@ private:
 
     bool reset = false;
 
-
+    
 
 
     int interactions = 0;
@@ -110,7 +110,7 @@ private:
     bool front_distance = false;
 
 
-
+    bool hemosVenido = false;    
 
 
 
