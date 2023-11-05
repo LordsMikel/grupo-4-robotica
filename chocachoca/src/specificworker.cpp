@@ -408,6 +408,8 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     
 
     int mindis = std::hypot(min_elem->x, min_elem->y);
+
+    bool condicion = (mindis < MIN);
     
     if (hemosVenido) {
     // Define los índices de inicio y fin para el rango lateral
@@ -424,12 +426,14 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
      MIN = 2500;    
          
-         
+     condicion = (mindis > 2500);     
 
-    }    
+    } 
+    
 
+    
 
-    if (mindis < MIN)
+    if (condicion)
     {
         SPIRAL_ROTATION = 0.5;  // Reset rotation rate
 
@@ -448,6 +452,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
         MAX_INTERACTIONS = 100;
         
+        reset = true;
 
 
         INCREASE_RATE = 0.01;
