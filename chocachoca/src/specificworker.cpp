@@ -138,6 +138,8 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
     int start_offset_lat = points.size() / 6;
     int end_offset_lat = (points.size() * 2) / 3;
 
+    static int i = 0;
+
     // Encuentra el punto más cercano en el rango lateral
     auto min_elem_lat = std::min_element(points.begin() + start_offset_lat, points.end() - end_offset_lat,
                                          [](auto a, auto b)
@@ -180,6 +182,28 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
         estado = Estado::STRAIGHT_LINE;
         robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
+
+
+        if (i == 10) {
+
+
+            qInfo() << "i es igual a 10";
+            
+            hemosVenido = true;
+            robot_speed = RobotSpeed{.adv = 0, .side = 0, .rot = 0};
+
+            estado = Estado::SPIRAL;
+            
+            i = 0;
+
+            return std::make_tuple(estado, robot_speed);
+
+            
+
+        }   
+        else {
+            i++;
+        }    
 
     }
 
@@ -319,7 +343,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     }
     else {
         i = 3;
-        reset = true;
     }
     robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
 
@@ -356,7 +379,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
         MAX_INTERACTIONS = 350;
 
-        change = false;
 
     }
 
@@ -383,27 +405,49 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     }
     else
         MIN = 600;
-
     
 
-    if (std::hypot(min_elem->x, min_elem->y) < MIN)
+    int mindis = std::hypot(min_elem->x, min_elem->y);
+    
+    if (hemosVenido) {
+    // Define los índices de inicio y fin para el rango lateral
+    int start_offset_lat = points.size() / 6;
+    int end_offset_lat = (points.size() * 2) / 3;
+
+    // Encuentra el punto más cercano en el rango lateral
+    auto min_elem_lat = std::min_element(points.begin() + start_offset_lat, points.end() - end_offset_lat,
+                                         [](auto a, auto b)
+                                         { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
+
+     mindis = std::hypot(min_elem_lat->x, min_elem_lat->y):
+
+
+     MIN = 2500;    
+         
+         
+
+    }    
+
+
+    if (mindis < MIN)
     {
         SPIRAL_ROTATION = 0.5;  // Reset rotation rate
 
         SPIRAL_SPEED = 1.0;
 
 
+        if (hemosVenido) {
+
+            hemosVenido = false;
+            
+        }    
+
         interactions = 0;
 
-       if (reset) {
 
 
-            MAX_INTERACTIONS = 100;
-
-        }
-        else {
-            MAX_INTERACTIONS = 200;
-        }
+        MAX_INTERACTIONS = 100;
+        
 
 
         INCREASE_RATE = 0.01;
@@ -427,15 +471,18 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
             SPIRAL_ROTATION = 0.5;  // Reset rotation rate
 
-        if (reset) {
+            if (change) {
+                change = false;
+                reset = true;
 
+            }    
+            
+          if (hemosVenido) {
 
-            MAX_INTERACTIONS = 100;
+            hemosVenido = false;
+            
+            }    
 
-        }
-        else {
-            MAX_INTERACTIONS = 200;
-        }
 
             INCREASE_RATE = 0.01;
 
