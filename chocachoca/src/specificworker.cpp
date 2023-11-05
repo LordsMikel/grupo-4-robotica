@@ -152,9 +152,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
     const float UmbralRot = 5.0;
 
-    static int i = 0;
-
-
 
     float rotAngular = UmbralRot * angle;
 
@@ -183,62 +180,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
 
         estado = Estado::STRAIGHT_LINE;
         robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
-
-
-
-        int offset = points.size() / 2 - points.size() / 3;
-        auto min_elem = std::min_element(points.begin() + offset, points.end() - offset,
-                                         [](auto a, auto b)
-                                         { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
-
-
-
-        //Podríamos entrar a espiral a veces!!!
-
-
-        qInfo()<< "Vamos hombre";
-
-        // utilizamos setSpeedBase para que el robot gire con last_rotAngular
-        // Al utiliza omnirobot_proxy->setSpeedBase(adv, side, rot) el robot gira con rot
-        // Y nos ahorramos un estado TURN.
-
-        // Si entramos aquí haremos que todo lo haga el 20% de las veces
-
-        qInfo() << "Distancia hipotenusa en follow wall" <<  lateral_distance;
-
-        qInfo() << "Valor de la i en follow wall:  " << i;
-
-//        if (i == 10) {
-//
-//            qInfo() << "Distancia hipotenusa en follow wall" <<  std::hypot(min_elem->x, min_elem->y);
-//
-//
-//                qInfo() << "Entramos en follow wall con last_rotAngular";
-//
-//                qInfo() << "Buenas:   " << last_rotAngular;
-//
-//                float rot = (last_rotAngular > 0) ? 3.0 : -3.0;
-//
-//
-//
-//                robot_speed = RobotSpeed{.adv = 1.0, .side = 0, .rot = rot};
-//
-//                omnirobot_proxy->setSpeedBase(1.0,0,-rot);
-//
-//
-//
-//                i = 0;
-//
-//                // NOTA antes se cambiaba a SPIRAL
-//                return std::make_tuple(Estado::STRAIGHT_LINE, robot_speed);
-//
-//
-//
-//        }
-//        else i++;
-//
-
-
 
     }
 
@@ -343,16 +284,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     }
 
 
-    if (std::hypot(min_elem->x, min_elem->y) > 450 && std::hypot(min_elem->x, min_elem->y) <= 570)  {
-
-        qInfo() << "HOLAAAAAAAAAA";
-        robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
-        prueba = true;
-        return std::make_tuple(Estado::SPIRAL, robot_speed);
-
-
-
-    }
     if (std::hypot(min_elem->x, min_elem->y) < MIN_DISTANCE)
     {
 
@@ -411,6 +342,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     static bool clockwise = true;       // Dirección de la espiral (true para horario, false para antihorario)
 
 
+    //Si queremos hacer una espiral más grande
     if (change) {
 
 
@@ -429,15 +361,16 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
     RobotSpeed robot_speed;
 
-    int offset = points.size() / 2 - points.size() / 3;
+    int offset = points.size() / 2 - points.size() / 5;
     auto min_elem = std::min_element(points.begin() + offset, points.end() - offset,
                                      [](auto a, auto b)
                                      { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
     int MIN = 0;
 
+    //Al ser una espiral más grande tenemos que reducir el mínimo!!!
     if (SPIRAL_SPEED == 2.0) {
 
-        MIN = 50;
+        MIN = 85;
 
     }
     else
@@ -445,7 +378,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
     
 
-    if (std::hypot(min_elem->x, min_elem->y) < MIN && !prueba)
+    if (std::hypot(min_elem->x, min_elem->y) < MIN)
     {
         SPIRAL_ROTATION = 0.5;  // Reset rotation rate
 
@@ -478,8 +411,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
             SPIRAL_ROTATION = 0.5;  // Reset rotation rate
 
             MAX_INTERACTIONS = 200;
-
-            prueba = false;
 
             INCREASE_RATE = 0.01;
 
