@@ -317,8 +317,10 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
             return std::make_tuple(Estado::SPIRAL, robot_speed);
         }
     }
-    else i = 3;
-
+    else {
+        i = 3;
+        reset = true;
+    }
     robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
 
 
@@ -352,13 +354,17 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
         SPIRAL_SPEED = 2.0;
 
 
-        MAX_INTERACTIONS = 430;
+        MAX_INTERACTIONS = 350;
 
         change = false;
 
     }
 
 
+    if (reset) {
+        SPIRAL_ROTATION = 0.25;
+        INCREASE_RATE = 0.005;
+    }
 
 
     RobotSpeed robot_speed;
@@ -372,7 +378,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     //Al ser una espiral más grande tenemos que reducir el mínimo!!!
     if (SPIRAL_SPEED == 2.0) {
 
-        MIN = 85;
+        MIN = 50;
 
     }
     else
@@ -389,7 +395,16 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
         interactions = 0;
 
-        MAX_INTERACTIONS = 200;
+       if (reset) {
+
+
+            MAX_INTERACTIONS = 100;
+
+        }
+        else {
+            MAX_INTERACTIONS = 200;
+        }
+
 
         INCREASE_RATE = 0.01;
 
@@ -412,7 +427,15 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
             SPIRAL_ROTATION = 0.5;  // Reset rotation rate
 
+        if (reset) {
+
+
+            MAX_INTERACTIONS = 100;
+
+        }
+        else {
             MAX_INTERACTIONS = 200;
+        }
 
             INCREASE_RATE = 0.01;
 
