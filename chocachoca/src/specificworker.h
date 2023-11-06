@@ -110,8 +110,11 @@ private:
     bool front_distance = false;
 
 
-    bool hemosVenido = false;    
+    int velocidad = 0;
 
+    bool hemosVenido = false;
+
+    bool clockwise = true;       // Dirección de la espiral (true para horario, false para antihorario)
 
 
 };
