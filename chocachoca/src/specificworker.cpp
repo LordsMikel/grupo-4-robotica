@@ -138,8 +138,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
     int start_offset_lat = points.size() / 6;
     int end_offset_lat = (points.size() * 2) / 3;
 
-    static int i = 0;
-
     // Encuentra el punto más cercano en el rango lateral
     auto min_elem_lat = std::min_element(points.begin() + start_offset_lat, points.end() - end_offset_lat,
                                          [](auto a, auto b)
@@ -153,6 +151,8 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
     Estado estado;
 
     const float UmbralRot = 5.0;
+
+
 
 
     float rotAngular = UmbralRot * angle;
@@ -183,27 +183,6 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::f
         estado = Estado::STRAIGHT_LINE;
         robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
 
-
-        if (i == 10) {
-
-
-            qInfo() << "i es igual a 10";
-            
-            hemosVenido = true;
-            robot_speed = RobotSpeed{.adv = 0, .side = 0, .rot = 0};
-
-            estado = Estado::SPIRAL;
-            
-            i = 0;
-
-            return std::make_tuple(estado, robot_speed);
-
-            
-
-        }   
-        else {
-            i++;
-        }    
 
     }
 
@@ -282,7 +261,7 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
         qInfo() << "el if con 2000,  " << "Distancia" << std::hypot(min_elem->x, min_elem->y);
 
-        if (dis(gen) < 0.2 || i == 1) {
+        if ( i == 1) {
             // Cambiamos a SPIRAL
             qInfo() << "Cambio a SPIRAL";
             qInfo() << "La distancia de referencia es: " << REFERENCE_DISTANCE;
@@ -295,10 +274,8 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
             robot_speed = RobotSpeed{.adv = 1, .side = 0, .rot = 0};
 
-            if (i == 1) {
-                i = 2;
-            }
-            
+            i = 2;
+
             return std::make_tuple(Estado::SPIRAL, robot_speed);
         }
 
@@ -329,8 +306,9 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
 
 
 
+    float x = (clockwise) ? 1 : - 1;
 
-    robot_speed = RobotSpeed{.adv = 1, .side = 0, .rot = 0};
+    robot_speed = RobotSpeed{.adv = 1, .side = 0, .rot = x};
 
     if (i != 2) {
         if (dis(gen) < 0.2) {
@@ -341,9 +319,8 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
             return std::make_tuple(Estado::SPIRAL, robot_speed);
         }
     }
-    else {
-        i = 3;
-    }
+    else i = 3;
+
     robot_speed = RobotSpeed{.adv = 2, .side = 0, .rot = 0};
 
 
@@ -366,10 +343,8 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     static float SPIRAL_SPEED = 1.0;    // Velocidad de avance del robot
     static float SPIRAL_ROTATION = 0.5; // Tasa de rotación inicial
     static float INCREASE_RATE = 0.01;  // Tasa de incremento de la rotación
-    static bool clockwise = true;       // Dirección de la espiral (true para horario, false para antihorario)
 
 
-    //Si queremos hacer una espiral más grande
     if (change) {
 
 
@@ -377,27 +352,23 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
         SPIRAL_SPEED = 2.0;
 
 
-        MAX_INTERACTIONS = 350;
+        MAX_INTERACTIONS = 430;
 
+        change = false;
 
     }
 
 
-    if (reset) {
-        SPIRAL_ROTATION = 0.25;
-        INCREASE_RATE = 0.005;
-    }
 
 
     RobotSpeed robot_speed;
 
-    int offset = points.size() / 2 - points.size() / 5;
+    int offset = points.size() / 2 - points.size() / 3;
     auto min_elem = std::min_element(points.begin() + offset, points.end() - offset,
                                      [](auto a, auto b)
                                      { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
     int MIN = 0;
 
-    //Al ser una espiral más grande tenemos que reducir el mínimo!!!
     if (SPIRAL_SPEED == 2.0) {
 
         MIN = 50;
@@ -405,57 +376,23 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
     }
     else
         MIN = 600;
-    
-
-    int mindis = std::hypot(min_elem->x, min_elem->y);
-
-    bool condicion = (mindis < MIN);
-    
-    if (hemosVenido) {
-    // Define los índices de inicio y fin para el rango lateral
-    int start_offset_lat = points.size() / 6;
-    int end_offset_lat = (points.size() * 2) / 3;
-
-    // Encuentra el punto más cercano en el rango lateral
-    auto min_elem_lat = std::min_element(points.begin() + start_offset_lat, points.end() - end_offset_lat,
-                                         [](auto a, auto b)
-                                         { return std::hypot(a.x, a.y) < std::hypot(b.x, b.y); });
-
-     mindis = std::hypot(min_elem_lat->x, min_elem_lat->y):
 
 
-     MIN = 2500;    
-         
-     condicion = (mindis > 2500);     
 
-    } 
-    
-
-    
-
-    if (condicion)
+    if (std::hypot(min_elem->x, min_elem->y) < MIN)
     {
-        SPIRAL_ROTATION = 0.5;  // Reset rotation rate
+        SPIRAL_ROTATION = 0.25;
+        INCREASE_RATE = 0.005;
 
-        SPIRAL_SPEED = 1.0;
-
-
-        if (hemosVenido) {
-
-            hemosVenido = false;
-            
-        }    
 
         interactions = 0;
 
-
-
         MAX_INTERACTIONS = 100;
-        
-        reset = true;
-
 
         INCREASE_RATE = 0.01;
+
+        SPIRAL_SPEED = 1.0;
+
 
         clockwise = !clockwise; // Invert the spiral direction
 
@@ -472,22 +409,14 @@ std::tuple<SpecificWorker::Estado, SpecificWorker::RobotSpeed> SpecificWorker::s
         {
             interactions = 0;
 
+
+            MAX_INTERACTIONS = 100;
+
+
+            SPIRAL_ROTATION = 0.25;
+            INCREASE_RATE = 0.005;
+
             SPIRAL_SPEED = 1.0;
-
-            SPIRAL_ROTATION = 0.5;  // Reset rotation rate
-
-            if (change) {
-                change = false;
-                reset = true;
-
-            }    
-            
-          if (hemosVenido) {
-
-            hemosVenido = false;
-            
-            }    
-
 
             INCREASE_RATE = 0.01;
 
