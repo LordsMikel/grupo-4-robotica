@@ -17,6 +17,7 @@
  *    along with RoboComp.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "specificworker.h"
+#include <cppitertools/sliding_window.hpp>
 
 /**
 * \brief Default constructor
@@ -82,7 +83,7 @@ void SpecificWorker::compute() {
 
     RoboCompLidar3D::TData ldata;
 
-    ldata = lidar3d_proxy->getLidarData("bpearl", 0, 360, 1);
+    ldata = lidar3d_proxy->getLidarData("helios", 0, 360, 1);
     qInfo() << ldata.points.size();
     const auto &points = ldata.points;
     if (points.empty()) return;
@@ -90,12 +91,45 @@ void SpecificWorker::compute() {
     //decltype(ldata.points) filtered_points;
     RoboCompLidar3D::TPoints filtered_points;
     std::ranges::copy_if(ldata.points, std::back_inserter(filtered_points), [](auto &p) { return p.z < 2000;});
-    draw_lidar(filtered_points, viewer);
 
+    auto lines = extract_lines(filtered_points);
+    auto peaks = extract_peaks(lines);
+
+
+    draw_lidar(lines.middle, viewer);
+}
+///////////////////////////////////////////////////////////////////////////////
+
+SpecificWorker::Lines SpecificWorker::extract_lines(const RoboCompLidar3D::TPoints &points)
+{
+    Lines lines;
+    for(const auto &p: points)
+    {
+        qInfo() << p.x << p.y << p.z;
+        if(p.z > LOW_LOW and p.z < LOW_HIGH)
+            lines.low.push_back(p);
+        if(p.z > MIDDLE_LOW and p.z < MIDDLE_HIGH)
+            lines.middle.push_back(p);
+        if(p.z > HIGH_LOW and p.z < HIGH_HIGH)
+            lines.high.push_back(p);
+    }
+    return lines;
+}
+
+SpecificWorker::Lines SpecificWorker::extract_peaks(const SpecificWorker::Lines &lines)
+{
+    Lines peaks;
+
+    for(const auto &both: iter::sliding_window(lines.low, 2))
+        if(fabs(both[1].r - both[0].r) > THRES)
+            peaks.low.push_back(both[0]);
+
+    return peaks;
 }
 
 
-int SpecificWorker::startup_check() {
+int SpecificWorker::startup_check()
+{
     std::cout << "Startup check" << std::endl;
     QTimer::singleShot(200, qApp, SLOT(quit()));
     return 0;
@@ -117,6 +151,8 @@ void SpecificWorker::draw_lidar(const RoboCompLidar3D::TPoints &points, Abstract
         borrar.push_back(point);
     }
 }
+
+
 
 
 

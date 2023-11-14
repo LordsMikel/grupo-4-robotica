@@ -33,28 +33,37 @@
 
 class SpecificWorker : public GenericWorker
 {
-Q_OBJECT
-public:
-    SpecificWorker(TuplePrx tprx, bool startup_check);
-    ~SpecificWorker();
-    bool setParams(RoboCompCommonBehavior::ParameterList params);
+    Q_OBJECT
+    public:
+        SpecificWorker(TuplePrx tprx, bool startup_check);
+        ~SpecificWorker();
+        bool setParams(RoboCompCommonBehavior::ParameterList params);
 
+    public slots:
+        void compute();
+        int startup_check();
+        void initialize(int period);
 
+    private:
 
-public slots:
-    int startup_check();
-    void initialize(int period);
+        const float LOW_LOW = 300;
+        const float LOW_HIGH = 500;
+        const float MIDDLE_LOW = 600;
+        const float MIDDLE_HIGH = 800;
+        const float HIGH_LOW = 1000;
+        const float HIGH_HIGH = 1200;
 
-
-
-private:
     bool startup_check_flag;
-    AbstractGraphicViewer *viewer;
+        AbstractGraphicViewer *viewer;
+        struct Lines
+        {
+            RoboCompLidar3D::TPoints low, middle, high;
+        };
 
-    void compute();
+        void draw_lidar(const RoboCompLidar3D::TPoints &points, AbstractGraphicViewer *viewer);
+        Lines extract_lines(const RoboCompLidar3D::TPoints &points);
 
-    void draw_lidar(const RoboCompLidar3D::TPoints &points, AbstractGraphicViewer *viewer);
-
+    SpecificWorker::Lines extract_peaks(Lines lines);
 };
 
 #endif
