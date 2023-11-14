@@ -54,16 +54,25 @@ class SpecificWorker : public GenericWorker
         const float HIGH_HIGH = 1200;
 
     bool startup_check_flag;
-        AbstractGraphicViewer *viewer;
-        struct Lines
-        {
-            RoboCompLidar3D::TPoints low, middle, high;
-        };
+    AbstractGraphicViewer *viewer;
+    struct Lines
+    {
+        RoboCompLidar3D::TPoints low, middle, high;
+    };
 
-        void draw_lidar(const RoboCompLidar3D::TPoints &points, AbstractGraphicViewer *viewer);
-        Lines extract_lines(const RoboCompLidar3D::TPoints &points);
+    struct Door
+    {
+        RoboCompLidar3D::TPoint left, right, middle;
+    };
+    using Doors = std::vector<Door>;
 
-    SpecificWorker::Lines extract_peaks(Lines lines);
+    void draw_lidar(const RoboCompLidar3D::TPoints &points, AbstractGraphicViewer *viewer);
+    Lines extract_lines(const RoboCompLidar3D::TPoints &points);
+
+    SpecificWorker::Lines extract_peaks(const Lines &peaks);
+    void draw_doors(const Doors &doors, AbstractGraphicViewer *viewer);
+
+    Doors get_doors(const Lines &lines);
 };
 
 #endif

@@ -13586,8 +13586,18 @@ src/CMakeFiles/rooms.dir/specificworker.cpp.o: /home/robocomp/robocomp/component
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGraphicsPolygonItem \
   /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qgraphicsitem.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qpainterpath.h \
-  /usr/include/c++/11/ranges
+  /usr/include/c++/11/ranges \
+  /usr/local/include/cppitertools/sliding_window.hpp \
+  /usr/local/include/cppitertools/internal/iterator_wrapper.hpp \
+  /usr/local/include/cppitertools/internal/iterbase.hpp \
+  /usr/local/include/cppitertools/internal/iteratoriterator.hpp \
+  /usr/local/include/cppitertools/internal/iterbase.hpp \
+  /usr/local/include/cppitertools/combinations.hpp
 
+
+/usr/local/include/cppitertools/combinations.hpp:
+
+/usr/local/include/cppitertools/sliding_window.hpp:
 
 src/rooms_autogen/EWIEGA46WW/moc_specificmonitor.cpp:
 
@@ -13708,6 +13718,8 @@ src/rooms_autogen/include/moc_sigwatch.cpp:
 /usr/include/x86_64-linux-gnu/bits/sigstack.h:
 
 /usr/include/x86_64-linux-gnu/sys/ucontext.h:
+
+/usr/local/include/cppitertools/internal/iterbase.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/siginfo-consts-arch.h:
 
@@ -14106,6 +14118,8 @@ src/ui_mainUI.h:
 /usr/include/boost/type_traits/is_class.hpp:
 
 /usr/include/boost/type_traits/is_same.hpp:
+
+/usr/local/include/cppitertools/internal/iteratoriterator.hpp:
 
 /usr/include/boost/type_traits/is_base_and_derived.hpp:
 
@@ -15894,6 +15908,8 @@ src/OmniRobot.h:
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qhashfunctions.h:
 
 /usr/include/c++/11/bits/stl_numeric.h:
+
+/usr/local/include/cppitertools/internal/iterator_wrapper.hpp:
 
 /usr/include/c++/11/bits/stl_tempbuf.h:
 

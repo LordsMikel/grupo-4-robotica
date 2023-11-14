@@ -18,6 +18,8 @@
  */
 #include "specificworker.h"
 #include <cppitertools/sliding_window.hpp>
+#include <cppitertools/combinations.hpp>
+
 
 /**
 * \brief Default constructor
@@ -76,15 +78,14 @@ void SpecificWorker::initialize(int period)
 
         timer.start(Period);
     }
-
 }
 
-void SpecificWorker::compute() {
+void SpecificWorker::compute()
+{
 
     RoboCompLidar3D::TData ldata;
 
     ldata = lidar3d_proxy->getLidarData("helios", 0, 360, 1);
-    qInfo() << ldata.points.size();
     const auto &points = ldata.points;
     if (points.empty()) return;
 
@@ -94,9 +95,10 @@ void SpecificWorker::compute() {
 
     auto lines = extract_lines(filtered_points);
     auto peaks = extract_peaks(lines);
-
+    auto doors = get_doors(peaks);
 
     draw_lidar(lines.middle, viewer);
+    draw_doors(doors, viewer);
 }
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -119,15 +121,54 @@ SpecificWorker::Lines SpecificWorker::extract_lines(const RoboCompLidar3D::TPoin
 SpecificWorker::Lines SpecificWorker::extract_peaks(const SpecificWorker::Lines &lines)
 {
     Lines peaks;
+    const float THRES_PEAK = 1000;
 
     for(const auto &both: iter::sliding_window(lines.low, 2))
-        if(fabs(both[1].r - both[0].r) > THRES)
+        if(fabs(both[1].r - both[0].r) > THRES_PEAK)
             peaks.low.push_back(both[0]);
+    for(const auto &both: iter::sliding_window(lines.middle, 2))
+        if(fabs(both[1].r - both[0].r) > THRES_PEAK)
+            peaks.middle.push_back(both[0]);
+    for(const auto &both: iter::sliding_window(lines.high, 2))
+        if(fabs(both[1].r - both[0].r) > THRES_PEAK)
+            peaks.high.push_back(both[0]);
 
     return peaks;
 }
 
+ SpecificWorker::Doors SpecificWorker::get_doors(const SpecificWorker::Lines &peaks)
+{
+    auto dist = [](auto a, auto b)
+            { return std::hypot(a.x-b.x, a.y-b.y); };
 
+    Doors doors;
+    const float THRES_DOOR = 100;
+    auto near_door = [doors, dist, THRES_DOOR](auto d)
+            { for(auto &&old : doors)
+                if( dist(old.left, d.left) < THRES_DOOR or
+                    dist(old.right, d.right) < THRES_DOOR or
+                    dist(old.left, d.right) < THRES_DOOR or
+                    dist(old.right, d.left) < THRES_DOOR)
+                    return true;
+                else
+                    return false;
+            };
+
+    for(auto &&par: peaks.middle | iter::combinations(2))
+    {
+        qInfo() << "punto" << dist(par[0], par[1]);
+        if(dist(par[0], par[1]) < 1300 and dist(par[0], par[1]) > 500)
+        {
+            auto door = Door{par[0], par[1]};
+            if( not near_door(door))
+                doors.emplace_back(door);
+        }
+    }
+    qInfo("--------");
+    return doors;
+}
+
+////////////////////////////////////////////////////////////////////////////
 int SpecificWorker::startup_check()
 {
     std::cout << "Startup check" << std::endl;
@@ -152,14 +193,25 @@ void SpecificWorker::draw_lidar(const RoboCompLidar3D::TPoints &points, Abstract
     }
 }
 
+void SpecificWorker::draw_doors(const Doors &doors, AbstractGraphicViewer *viewer) {
+    static std::vector<QGraphicsItem *> borrar;
+    for (auto &b: borrar) {
+        viewer->scene.removeItem(b);
+        delete b;
+    }
+    borrar.clear();
 
-
-
-
-
-
-
-
+    for (const auto &d: doors) {
+        auto point = viewer->scene.addRect(-50, -50, 100, 100, QPen(QColor("green")), QBrush(QColor("green")));
+        point->setPos(d.left.x, d.left.y);
+        borrar.push_back(point);
+        point = viewer->scene.addRect(-50, -50, 100, 100, QPen(QColor("green")), QBrush(QColor("green")));
+        point->setPos(d.right.x, d.right.y);
+        borrar.push_back(point);
+        auto line = viewer->scene.addLine(d.left.x, d.left.y, d.right.x, d.right.y, QPen(QColor("green"), 50));
+        borrar.push_back(line);
+    }
+}
 /**************************************/
 // From the RoboCompLidar3D you can call this methods:
 // this->lidar3d_proxy->getLidarData(...)
