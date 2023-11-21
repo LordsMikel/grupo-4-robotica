@@ -63,6 +63,8 @@ class SpecificWorker : public GenericWorker
     struct Door
     {
         RoboCompLidar3D::TPoint left, right, middle;
+        bool operator==(Door d){};
+
     };
     using Doors = std::vector<Door>;
 
@@ -72,7 +74,11 @@ class SpecificWorker : public GenericWorker
     SpecificWorker::Lines extract_peaks(const Lines &peaks);
     void draw_doors(const Doors &doors, AbstractGraphicViewer *viewer);
 
-    Doors get_doors(const Lines &lines);
+    std::tuple<SpecificWorker::Doors, SpecificWorker::Doors, SpecificWorker::Doors>
+    get_doors(const Lines &lines);
+
+    Doors filter_doors(const std::tuple<SpecificWorker::Doors, SpecificWorker::Doors, SpecificWorker::Doors> &doors);
 };
+
 
 #endif
