@@ -47,18 +47,18 @@ class SpecificWorker : public GenericWorker
 
     private:
 
-        const float LOW_LOW = 300;
-        const float LOW_HIGH = 500;
-        const float MIDDLE_LOW = 600;
-        const float MIDDLE_HIGH = 800;
-        const float HIGH_LOW = 1200;
-        const float HIGH_HIGH = 1400;
+        const float LOW_LOW = 0;
+        const float LOW_HIGH = 400;
+        const float MIDDLE_LOW = 800;
+        const float MIDDLE_HIGH = 1200;
+        const float HIGH_LOW = 1600;
+        const float HIGH_HIGH = 2000;
 
     bool startup_check_flag;
     AbstractGraphicViewer *viewer;
 
     const float MAX_ADV_SPEED = 700;
-    const float DOOR_PROXIMITY_THRESHOLD = 1200;
+    const float DOOR_PROXIMITY_THRESHOLD = 1000;
 
     struct Lines
     {

@@ -104,12 +104,12 @@ void SpecificWorker::compute()
         case States::GOTO_DOOR:
         {
             //Info() << "GOTO_DOOR";
+            qInfo() << "distance " << door_target.dist_to_robot();
             if(door_target.dist_to_robot() < DOOR_PROXIMITY_THRESHOLD)
             {
-                qInfo() << "distance " << door_target.dist_to_robot();
                 move_robot(0,0,0);
                 qInfo() << "GOTO_DOOR Target achieved";
-                state = States::IDLE;
+                state = States::GO_THROUGH;
             }
             // match door_target against new perceived doors
             auto res = std::ranges::find(doors, door_target);
@@ -128,6 +128,11 @@ void SpecificWorker::compute()
             }
          break;
         }
+        case States::GO_THROUGH:
+        {
+
+            break;
+        }
     }
 
     // move the robot
@@ -140,12 +145,8 @@ float SpecificWorker::break_adv(float dist_to_target)
 }
 float SpecificWorker::break_rot(float rot)
 {
-    if(rot>=0)
-        return std::clamp(1-rot, 0.f, 1.f);
-    else
-        return std::clamp(rot+1, 0.f, 1.f);
+    return rot>=0 ? std::clamp(1-rot, 0.f, 1.f) : std::clamp(rot+1, 0.f, 1.f);
 }
-
 
 void SpecificWorker::move_robot(float side, float adv, float rot)
 {
@@ -269,8 +270,9 @@ SpecificWorker::Doors
 SpecificWorker::filter_doors(const tuple<SpecificWorker::Doors, SpecificWorker::Doors, SpecificWorker::Doors> &doors)
 {
     Doors final_doors;
-
     auto &[dlow, dmiddle, dhigh] = doors;
+    return dmiddle;
+
 //    for(auto &dl: dlow)
 //    {
 //        std::apply([dl](auto&&... args)
@@ -284,7 +286,7 @@ SpecificWorker::filter_doors(const tuple<SpecificWorker::Doors, SpecificWorker::
         if (equal_middle and equal_high)
             final_doors.push_back(dl);
     }
-    return final_doors;
+    //return final_doors;
 }
 
 ////////////////////////////////////////////////////////////////////////////
