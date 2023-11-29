@@ -80,26 +80,81 @@ void SpecificWorker::compute()
     auto doors = doors_extractor(filtered_points);
 
     // state machine
-    auto res = std::ranges::find(doors, door_target);
-    if( res != doors.end())
-        door_target = *res;
-    else
-    {
-        qInfo() << "No door detected";
-        return;
+    switch (state) {
+        case States::IDLE:
+        {
+            move_robot(0,0,0);
+            break;
+        }
+        case States::SEARCH_DOOR:
+        {
+            //qInfo() << "SEARCH_DOOR";
+            if(not doors.empty())
+            {
+                door_target = doors[0];
+                move_robot(0,0,0);
+                state = States::GOTO_DOOR;
+                qInfo() << "First found";
+                door_target.print();
+            }
+            else
+                move_robot(0,0,0.5);
+            break;
+        }
+        case States::GOTO_DOOR:
+        {
+            //Info() << "GOTO_DOOR";
+            if(door_target.dist_to_robot() < DOOR_PROXIMITY_THRESHOLD)
+            {
+                qInfo() << "distance " << door_target.dist_to_robot();
+                move_robot(0,0,0);
+                qInfo() << "GOTO_DOOR Target achieved";
+                state = States::IDLE;
+            }
+            // match door_target against new perceived doors
+            auto res = std::ranges::find(doors, door_target);
+            if( res != doors.end())
+            {
+                door_target = *res;
+                float rot = -0.5*door_target.angle_to_robot();
+                float adv = MAX_ADV_SPEED * break_adv(door_target.dist_to_robot()) * break_rot(door_target.angle_to_robot()) /1000.f;
+                move_robot(0, adv, rot);
+            }
+            else
+            {
+                move_robot(0,0,0);
+                state = States::SEARCH_DOOR;
+                qInfo() << "GOTO_DOOR Door lost, searching";
+            }
+         break;
+        }
     }
-
-//    switch (estado)
-//    {
-//
-//
-//    }
 
     // move the robot
 
-
 }
 ///////////////////////////////////////////////////////////////////////////////
+float SpecificWorker::break_adv(float dist_to_target)
+{
+    return std::clamp(dist_to_target/DOOR_PROXIMITY_THRESHOLD, 0.f, 1.f );
+}
+float SpecificWorker::break_rot(float rot)
+{
+    if(rot>=0)
+        return std::clamp(1-rot, 0.f, 1.f);
+    else
+        return std::clamp(rot+1, 0.f, 1.f);
+}
+
+
+void SpecificWorker::move_robot(float side, float adv, float rot)
+{
+    try
+    {
+        omnirobot_proxy->setSpeedBase(adv, 0, rot);
+    }
+    catch(const Ice::Exception &e){ std::cout << e << std::endl;}
+}
 SpecificWorker::Doors
 SpecificWorker::doors_extractor(const RoboCompLidar3D::TPoints  &filtered_points)
 {
@@ -214,7 +269,13 @@ SpecificWorker::Doors
 SpecificWorker::filter_doors(const tuple<SpecificWorker::Doors, SpecificWorker::Doors, SpecificWorker::Doors> &doors)
 {
     Doors final_doors;
+
     auto &[dlow, dmiddle, dhigh] = doors;
+//    for(auto &dl: dlow)
+//    {
+//        std::apply([dl](auto&&... args)
+//            {((std::ranges::find(args, dl) != args.end()), ...);}, doors);
+//    }
     for(auto &dl: dlow)
     {
         bool equal_middle = std::ranges::find(dmiddle, dl) != dmiddle.end();
@@ -260,14 +321,20 @@ void SpecificWorker::draw_doors(const Doors &doors, AbstractGraphicViewer *viewe
     }
     borrar.clear();
 
-    for (const auto &d: doors) {
-        auto point = viewer->scene.addRect(-50, -50, 100, 100, QPen(color), QBrush(color));
+    QColor target_color;
+    for (const auto &d: doors)
+    {
+        if(d == door_target)
+            target_color = QColor("magenta");
+        else
+            target_color = color;
+        auto point = viewer->scene.addRect(-50, -50, 100, 100, QPen(target_color), QBrush(target_color));
         point->setPos(d.left.x, d.left.y);
         borrar.push_back(point);
-        point = viewer->scene.addRect(-50, -50, 100, 100, QPen(color), QBrush(color));
+        point = viewer->scene.addRect(-50, -50, 100, 100, QPen(target_color), QBrush(target_color));
         point->setPos(d.right.x, d.right.y);
         borrar.push_back(point);
-        auto line = viewer->scene.addLine(d.left.x, d.left.y, d.right.x, d.right.y, QPen(color, 50));
+        auto line = viewer->scene.addLine(d.left.x, d.left.y, d.right.x, d.right.y, QPen(target_color, 50));
         borrar.push_back(line);
     }
 }
