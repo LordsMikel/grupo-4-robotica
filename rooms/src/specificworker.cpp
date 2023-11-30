@@ -116,8 +116,8 @@ void SpecificWorker::compute()
             if( res != doors.end())
             {
                 door_target = *res;
-                float rot = -0.5*door_target.angle_to_robot();
-                float adv = MAX_ADV_SPEED * break_adv(door_target.dist_to_robot()) * break_rot(door_target.angle_to_robot()) /1000.f;
+                float rot = -0.5*door_target.perp_angle_to_robot();
+                float adv = MAX_ADV_SPEED * break_adv(door_target.perp_dist_to_robot()) * break_rot(door_target.perp_angle_to_robot()) /1000.f;
                 move_robot(0, adv, rot);
             }
             else
@@ -130,7 +130,7 @@ void SpecificWorker::compute()
         }
         case States::GO_THROUGH:
         {
-
+            move_robot(0,0,0);
             break;
         }
     }
@@ -322,12 +322,20 @@ void SpecificWorker::draw_doors(const Doors &doors, AbstractGraphicViewer *viewe
         delete b;
     }
     borrar.clear();
+    static QGraphicsItem *middle = nullptr;
+    if(middle != nullptr)
+        viewer->scene.removeItem(middle);
 
     QColor target_color;
     for (const auto &d: doors)
     {
         if(d == door_target)
+        {
             target_color = QColor("magenta");
+            middle = viewer->scene.addRect(-100, -100, 200, 200, QColor("orange"), QBrush(QColor("orange")));
+            auto perp = door_target.perpendicular_point();
+//            middle->setPos(perp.x, perp.y);
+        }
         else
             target_color = color;
         auto point = viewer->scene.addRect(-50, -50, 100, 100, QPen(target_color), QBrush(target_color));
