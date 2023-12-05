@@ -145,7 +145,7 @@ void SpecificWorker::compute()
                 qInfo() << "GOTO_DOOR Door lost, searching";
             }
             //
-            if( fabs(door_target.angle_to_robot()) < 0.2)
+            if( fabs(door_target.angle_to_robot()) < 0.0)
             {
                 move_robot(0,0,0);
                 state = States::GO_THROUGH;
