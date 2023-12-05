@@ -98,13 +98,13 @@ void SpecificWorker::compute()
                 door_target.print();
             }
             else
-                move_robot(0,0,0.5);
+                move_robot(0,0,0.3);
             break;
         }
         case States::GOTO_DOOR:
         {
             //Info() << "GOTO_DOOR";
-            qInfo() << "distance " << door_target.dist_to_robot();
+            //qInfo() << "distance " << door_target.dist_to_robot();
             if(door_target.dist_to_robot() < DOOR_PROXIMITY_THRESHOLD)
             {
                 move_robot(0,0,0);
@@ -334,7 +334,8 @@ void SpecificWorker::draw_doors(const Doors &doors, AbstractGraphicViewer *viewe
             target_color = QColor("magenta");
             middle = viewer->scene.addRect(-100, -100, 200, 200, QColor("orange"), QBrush(QColor("orange")));
             auto perp = door_target.perpendicular_point();
-//            middle->setPos(perp.x, perp.y);
+            middle->setPos(perp.x, perp.y);
+            borrar.push_back(middle);
         }
         else
             target_color = color;

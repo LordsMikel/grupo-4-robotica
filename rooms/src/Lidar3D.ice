@@ -24,6 +24,17 @@ module RoboCompLidar3D
 		int pixelY;
 	};
 	sequence <TPoint> TPoints;
+	sequence <float> TFloatArray;
+	sequence <int> TIntArray;
+	struct TDataImage
+	{
+		long timestamp;
+		TFloatArray XArray;
+		TFloatArray YArray;
+		TFloatArray ZArray;
+		TIntArray XPixel;
+		TIntArray YPixel;
+	};
 	struct TData
 	{
 		TPoints points;
@@ -33,6 +44,7 @@ module RoboCompLidar3D
 	interface Lidar3D
 	{
 		TData getLidarData (string name, float start, float len, int decimationDegreeFactor);
+		TDataImage getLidarDataArrayProyectedInImage (string name);
 		TData getLidarDataProyectedInImage (string name);
 		TData getLidarDataWithThreshold2d (string name, float distance);
 	};
