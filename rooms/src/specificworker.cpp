@@ -105,11 +105,11 @@ void SpecificWorker::compute()
         {
             //Info() << "GOTO_DOOR";
             //qInfo() << "distance " << door_target.dist_to_robot();
-            if(door_target.dist_to_robot() < DOOR_PROXIMITY_THRESHOLD)
+            if(door_target.perp_dist_to_robot() < DOOR_PROXIMITY_THRESHOLD)
             {
                 move_robot(0,0,0);
                 qInfo() << "GOTO_DOOR Target achieved";
-                state = States::GO_THROUGH;
+                state = States::ALIGN;
             }
             // match door_target against new perceived doors
             auto res = std::ranges::find(doors, door_target);
@@ -127,6 +127,34 @@ void SpecificWorker::compute()
                 qInfo() << "GOTO_DOOR Door lost, searching";
             }
          break;
+        }
+        case States::ALIGN:
+        {
+            auto res = std::ranges::find(doors, door_target);
+            if( res != doors.end())
+            {
+                door_target = *res;
+                float rot = -0.5*door_target.perp_angle_to_robot();
+                float adv = MAX_ADV_SPEED * break_adv(door_target.perp_dist_to_robot()) * break_rot(door_target.perp_angle_to_robot()) /1000.f;
+                move_robot(0, adv, rot);
+            }
+            else
+            {
+                move_robot(0,0,0);
+                state = States::SEARCH_DOOR;
+                qInfo() << "GOTO_DOOR Door lost, searching";
+            }
+            //
+            if( fabs(door_target.angle_to_robot()) < 0.2)
+            {
+                move_robot(0,0,0);
+                state = States::GO_THROUGH;
+                return;
+            }
+            qInfo() << door_target.angle_to_robot();
+            float rot = -0.4 * door_target.angle_to_robot();
+            move_robot(0,0,rot);
+            break;
         }
         case States::GO_THROUGH:
         {
@@ -322,9 +350,6 @@ void SpecificWorker::draw_doors(const Doors &doors, AbstractGraphicViewer *viewe
         delete b;
     }
     borrar.clear();
-    static QGraphicsItem *middle = nullptr;
-    if(middle != nullptr)
-        viewer->scene.removeItem(middle);
 
     QColor target_color;
     for (const auto &d: doors)
@@ -332,7 +357,7 @@ void SpecificWorker::draw_doors(const Doors &doors, AbstractGraphicViewer *viewe
         if(d == door_target)
         {
             target_color = QColor("magenta");
-            middle = viewer->scene.addRect(-100, -100, 200, 200, QColor("orange"), QBrush(QColor("orange")));
+            auto middle = viewer->scene.addRect(-100, -100, 200, 200, QColor("orange"), QBrush(QColor("orange")));
             auto perp = door_target.perpendicular_point();
             middle->setPos(perp.x, perp.y);
             borrar.push_back(middle);

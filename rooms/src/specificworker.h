@@ -58,7 +58,7 @@ class SpecificWorker : public GenericWorker
     AbstractGraphicViewer *viewer;
 
     const float MAX_ADV_SPEED = 700;
-    const float DOOR_PROXIMITY_THRESHOLD = 1000;
+    const float DOOR_PROXIMITY_THRESHOLD = 200;
 
     struct Lines
     {
@@ -149,7 +149,7 @@ class SpecificWorker : public GenericWorker
 
     // states
     Door door_target;
-    enum class States{ IDLE, SEARCH_DOOR, GOTO_DOOR, GO_THROUGH};
+    enum class States{ IDLE, SEARCH_DOOR, GOTO_DOOR, GO_THROUGH, ALIGN};
     States state = States::SEARCH_DOOR;
 
 
