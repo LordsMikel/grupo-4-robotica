@@ -115,7 +115,7 @@ void SpecificWorker::state_machine(const Doors &doors)
             //qInfo() << "distance " << door_target.dist_to_robot();
             if(door_target.perp_dist_to_robot() < consts.DOOR_PROXIMITY_THRESHOLD)
             {
-                move_robot(0,0,0);
+                move_robot(1,0, 0);
                 qInfo() << "GOTO_DOOR Target achieved";
                 state = States::ALIGN;
             }
@@ -143,9 +143,27 @@ void SpecificWorker::state_machine(const Doors &doors)
         }
         case States::GO_THROUGH:
         {
-            move_robot(0,0,0);
+            auto now = std::chrono::steady_clock::now();
+
+            // Check if the state just started
+            if (!goThroughStartTime.time_since_epoch().count())
+                goThroughStartTime = now;
+
+            // Check if 5000 ms have passed
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(now - goThroughStartTime) < std::chrono::milliseconds(6000))
+            {
+                // Less than 5 seconds have passed, continue moving the robot
+                move_robot(0, 1.0, 0);
+            }
+            else
+            {
+                // 5 seconds have passed, reset the timer and change state
+                goThroughStartTime = std::chrono::steady_clock::time_point();  // Reset timer
+                state = States::SEARCH_DOOR; // Transition to the next state
+            }
             break;
         }
+
     }
 }
 
@@ -246,7 +264,7 @@ void SpecificWorker::draw_lines(const Lines &lines, AbstractGraphicViewer *pView
         for(const auto &p : line)
         {
             auto point = pViewer->scene.addRect(-50,-50,100, 100,
-                                           QPen(QColor("lightblue")), QBrush(QColor("lightblue")));
+                                                QPen(QColor("lightblue")), QBrush(QColor("lightblue")));
             point->setPos(p.x(), p.y());
             borrar.push_back(point);
         }
@@ -293,4 +311,3 @@ void SpecificWorker::draw_lines(const Lines &lines, AbstractGraphicViewer *pView
 // From the RoboCompLidar3D you can use this types:
 // RoboCompLidar3D::TPoint
 // RoboCompLidar3D::TData
-

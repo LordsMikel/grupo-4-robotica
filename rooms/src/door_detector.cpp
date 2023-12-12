@@ -46,10 +46,10 @@ DoorDetector::Doors_list DoorDetector::get_doors(const DoorDetector::Peaks_list 
     auto near_door = [thres = consts.SAME_DOOR](auto &doors_list, auto d)
     {
         return std::ranges::any_of(doors_list, [d, thres](auto &old)
-            {return (old.p0-d.p0).norm() < thres or
-                    (old.p1-d.p1).norm() < thres or
-                    (old.p1-d.p0).norm() < thres or
-                    (old.p0-d.p1).norm() < thres;});
+        {return (old.p0-d.p0).norm() < thres or
+                (old.p1-d.p1).norm() < thres or
+                (old.p1-d.p0).norm() < thres or
+                (old.p0-d.p1).norm() < thres;});
     };
 
     for(const auto &[i, peaks] : peaks_list | iter::enumerate)
