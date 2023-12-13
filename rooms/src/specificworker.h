@@ -31,6 +31,7 @@
 #include <tuple>
 #include "door_detector.h"
 #include <Eigen/Dense>
+#include "graph.h"
 
 class SpecificWorker : public GenericWorker
 {
@@ -84,11 +85,10 @@ private:
     float break_adv(float dist_to_target);
     float break_rot(float rot);
 
-    // Add this private member to your SpecificWorker class
-    std::chrono::steady_clock::time_point crossDoorStartTime;
+    Graph graph;
 
 
-// In your SpecificWorker class
+    // In your SpecificWorker class
     std::chrono::steady_clock::time_point goThroughStartTime;
 
 };

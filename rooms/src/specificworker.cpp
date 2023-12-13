@@ -80,6 +80,8 @@ void SpecificWorker::compute()
 
     // draw
     //draw_lidar(points, viewer);
+    graph.print();
+
     draw_lines(lines, viewer);
     draw_target_door(door_target, viewer);
 
@@ -97,12 +99,20 @@ void SpecificWorker::state_machine(const Doors &doors)
         case States::SEARCH_DOOR:
         {
             //qInfo() << "SEARCH_DOOR";
-            if(not doors.empty())
+            if(!doors.empty())
             {
-                door_target = doors[0];
+                Door closest_door = doors[0];
+                for (const auto& door : doors)
+                {
+                    if (fabs(door.angle_to_robot()) < fabs(closest_door.angle_to_robot()))
+                    {
+                        closest_door = door;
+                    }
+                }
+                door_target = closest_door;
                 move_robot(0,0,0);
                 state = States::GOTO_DOOR;
-                qInfo() << "First found";
+                qInfo() << "Door with smallest angle found";
                 door_target.print();
             }
             else
@@ -130,14 +140,14 @@ void SpecificWorker::state_machine(const Doors &doors)
         }
         case States::ALIGN:
         {
-            if( fabs(door_target.angle_to_robot()) < 0.01)
+            if( fabs(door_target.angle_to_robot()) < 0.02)
             {
                 move_robot(0,0,0);
                 state = States::GO_THROUGH;
                 return;
             }
             //qInfo() << door_target.angle_to_robot();
-            float rot = -0.4 * door_target.angle_to_robot();
+            float rot = -0.5 * door_target.angle_to_robot();
             move_robot(0,0,rot);
             break;
         }
@@ -150,7 +160,7 @@ void SpecificWorker::state_machine(const Doors &doors)
                 goThroughStartTime = now;
 
             // Check if 5000 ms have passed
-            if (std::chrono::duration_cast<std::chrono::milliseconds>(now - goThroughStartTime) < std::chrono::milliseconds(6000))
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(now - goThroughStartTime) < std::chrono::milliseconds(10000))
             {
                 // Less than 5 seconds have passed, continue moving the robot
                 move_robot(0, 1.0, 0);
