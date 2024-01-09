@@ -159,10 +159,10 @@ void SpecificWorker::state_machine(const Doors &doors)
             if (!goThroughStartTime.time_since_epoch().count())
                 goThroughStartTime = now;
 
-            // Check if 5000 ms have passed
+            // Check if 10 seconds have passed
             if (std::chrono::duration_cast<std::chrono::milliseconds>(now - goThroughStartTime) < std::chrono::milliseconds(10000))
             {
-                // Less than 5 seconds have passed, continue moving the robot
+                // Less than 10 seconds have passed, continue moving the robot
                 move_robot(0, 1.0, 0);
             }
             else
