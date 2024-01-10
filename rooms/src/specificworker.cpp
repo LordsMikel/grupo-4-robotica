@@ -87,9 +87,27 @@ void SpecificWorker::compute()
 
 
     const auto& currentNodes = graph.getNodes();
-    if (!currentNodes.empty()) {
-        std::cout << "Habitación actual: " << currentNodes.back() << std::endl;
+
+    if (currentNodes.size() == 3) {
+
+        static int contador = 0; // Variable estática para mantener su valor entre llamadas
+
+// Aquí va la lógica que se ejecutará en cada iteración
+        std::cout << "Contador: " << contador << std::endl;
+
+// Incrementar el contador
+        contador++;
+
+// Si el contador llega a 4, lo reseteamos
+        if (contador == 4) {
+            contador = 0;
+        }
+
+
+
     }
+    else
+    std::cout << "Habitación actual: " << currentNodes.back() << std::endl;
 
 
 
@@ -133,6 +151,8 @@ void SpecificWorker::state_machine(const Doors &doors)
         }
         case States::GOTO_DOOR:
         {
+            graph.print();
+
             //Info() << "GOTO_DOOR";
             //qInfo() << "distance " << door_target.dist_to_robot();
             if(door_target.perp_dist_to_robot() < consts.DOOR_PROXIMITY_THRESHOLD)
@@ -156,7 +176,22 @@ void SpecificWorker::state_machine(const Doors &doors)
             {
                 move_robot(0,0,0);
                 state = States::GO_THROUGH;
+
+                qInfo()<<"HOLA222";
+                const auto& currentNodes = graph.getNodes();
+                // Obtener el número actual de nodos
+                if (currentNodes.size() <= 3)
+                {
+                    int newNode = graph.add_node();
+                    graph.add_edge(newNode - 1, newNode);
+                    std::cout << "Habitación " << newNode << " añadida al grafo al pasar por la puerta." << std::endl;
+                }
+
+
+
                 return;
+
+
             }
             //qInfo() << door_target.angle_to_robot();
             float rot = -0.5 * door_target.angle_to_robot();
@@ -167,7 +202,6 @@ void SpecificWorker::state_machine(const Doors &doors)
         {
             const auto& currentNodes = graph.getNodes();
 
-            std::cout << "Habitación actual: " << currentNodes.back() << std::endl;
 
             auto now = std::chrono::steady_clock::now();
 
@@ -186,28 +220,6 @@ void SpecificWorker::state_machine(const Doors &doors)
                 // Han pasado 5 segundos, resetear el temporizador y cambiar de estado
                 goThroughStartTime = std::chrono::steady_clock::time_point();  // Resetear el temporizador
 
-                // Obtener el número actual de nodos
-                if (currentNodes.size() <= 3)
-                {
-                    int newNode = graph.add_node();
-                    graph.add_edge(newNode - 1, newNode);
-                    std::cout << "Habitación " << newNode << " añadida al grafo al pasar por la puerta." << std::endl;
-                }
-                else {
-                    static int contador = 0; // Variable estática para mantener su valor entre llamadas
-
-                    // Aquí va la lógica que se ejecutará en cada iteración
-                    std::cout << "Habitación actual: " << contador << std::endl;
-
-                    // Incrementar el contador
-                    contador++;
-
-                    // Si el contador llega a 4, lo reseteamos
-                    if (contador == 4) {
-                        contador = 0;
-                    }
-
-                }
 
 
 

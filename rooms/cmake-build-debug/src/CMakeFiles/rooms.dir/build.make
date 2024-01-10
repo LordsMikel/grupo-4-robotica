@@ -158,10 +158,24 @@ src/CMakeFiles/rooms.dir/graph.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rooms.dir/graph.cpp.s"
 	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/graph.cpp -o CMakeFiles/rooms.dir/graph.cpp.s
 
+src/CMakeFiles/rooms.dir/door_detector.cpp.o: src/CMakeFiles/rooms.dir/flags.make
+src/CMakeFiles/rooms.dir/door_detector.cpp.o: /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/door_detector.cpp
+src/CMakeFiles/rooms.dir/door_detector.cpp.o: src/CMakeFiles/rooms.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/rooms.dir/door_detector.cpp.o"
+	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/rooms.dir/door_detector.cpp.o -MF CMakeFiles/rooms.dir/door_detector.cpp.o.d -o CMakeFiles/rooms.dir/door_detector.cpp.o -c /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/door_detector.cpp
+
+src/CMakeFiles/rooms.dir/door_detector.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/rooms.dir/door_detector.cpp.i"
+	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/door_detector.cpp > CMakeFiles/rooms.dir/door_detector.cpp.i
+
+src/CMakeFiles/rooms.dir/door_detector.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rooms.dir/door_detector.cpp.s"
+	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/door_detector.cpp -o CMakeFiles/rooms.dir/door_detector.cpp.s
+
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp.o: src/CMakeFiles/rooms.dir/flags.make
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp.o: /home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp.o: src/CMakeFiles/rooms.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp.o"
 	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp.o -MF CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp.o.d -o CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp.o -c /home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp
 
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp.i: cmake_force
@@ -175,7 +189,7 @@ src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplication.cpp.o: src/CMakeFiles/rooms.dir/flags.make
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplication.cpp.o: /home/robocomp/robocomp/classes/rapplication/rapplication.cpp
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplication.cpp.o: src/CMakeFiles/rooms.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplication.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplication.cpp.o"
 	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplication.cpp.o -MF CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplication.cpp.o.d -o CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplication.cpp.o -c /home/robocomp/robocomp/classes/rapplication/rapplication.cpp
 
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplication.cpp.i: cmake_force
@@ -189,7 +203,7 @@ src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplicatio
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.o: src/CMakeFiles/rooms.dir/flags.make
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.o: /home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.o: src/CMakeFiles/rooms.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.o"
 	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.o -MF CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.o.d -o CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.o -c /home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp
 
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.i: cmake_force
@@ -203,7 +217,7 @@ src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.s:
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/qlog/qlog.cpp.o: src/CMakeFiles/rooms.dir/flags.make
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/qlog/qlog.cpp.o: /home/robocomp/robocomp/classes/qlog/qlog.cpp
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/qlog/qlog.cpp.o: src/CMakeFiles/rooms.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/qlog/qlog.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/qlog/qlog.cpp.o"
 	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/qlog/qlog.cpp.o -MF CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/qlog/qlog.cpp.o.d -o CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/qlog/qlog.cpp.o -c /home/robocomp/robocomp/classes/qlog/qlog.cpp
 
 src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/qlog/qlog.cpp.i: cmake_force
@@ -217,7 +231,7 @@ src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/qlog/qlog.cpp.s: cmake_f
 src/CMakeFiles/rooms.dir/main.cpp.o: src/CMakeFiles/rooms.dir/flags.make
 src/CMakeFiles/rooms.dir/main.cpp.o: /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/main.cpp
 src/CMakeFiles/rooms.dir/main.cpp.o: src/CMakeFiles/rooms.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/CMakeFiles/rooms.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/CMakeFiles/rooms.dir/main.cpp.o"
 	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/rooms.dir/main.cpp.o -MF CMakeFiles/rooms.dir/main.cpp.o.d -o CMakeFiles/rooms.dir/main.cpp.o -c /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/main.cpp
 
 src/CMakeFiles/rooms.dir/main.cpp.i: cmake_force
@@ -231,7 +245,7 @@ src/CMakeFiles/rooms.dir/main.cpp.s: cmake_force
 src/CMakeFiles/rooms.dir/genericmonitor.cpp.o: src/CMakeFiles/rooms.dir/flags.make
 src/CMakeFiles/rooms.dir/genericmonitor.cpp.o: /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/genericmonitor.cpp
 src/CMakeFiles/rooms.dir/genericmonitor.cpp.o: src/CMakeFiles/rooms.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/CMakeFiles/rooms.dir/genericmonitor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/CMakeFiles/rooms.dir/genericmonitor.cpp.o"
 	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/rooms.dir/genericmonitor.cpp.o -MF CMakeFiles/rooms.dir/genericmonitor.cpp.o.d -o CMakeFiles/rooms.dir/genericmonitor.cpp.o -c /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/genericmonitor.cpp
 
 src/CMakeFiles/rooms.dir/genericmonitor.cpp.i: cmake_force
@@ -245,7 +259,7 @@ src/CMakeFiles/rooms.dir/genericmonitor.cpp.s: cmake_force
 src/CMakeFiles/rooms.dir/commonbehaviorI.cpp.o: src/CMakeFiles/rooms.dir/flags.make
 src/CMakeFiles/rooms.dir/commonbehaviorI.cpp.o: /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/commonbehaviorI.cpp
 src/CMakeFiles/rooms.dir/commonbehaviorI.cpp.o: src/CMakeFiles/rooms.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/CMakeFiles/rooms.dir/commonbehaviorI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/CMakeFiles/rooms.dir/commonbehaviorI.cpp.o"
 	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/rooms.dir/commonbehaviorI.cpp.o -MF CMakeFiles/rooms.dir/commonbehaviorI.cpp.o.d -o CMakeFiles/rooms.dir/commonbehaviorI.cpp.o -c /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/commonbehaviorI.cpp
 
 src/CMakeFiles/rooms.dir/commonbehaviorI.cpp.i: cmake_force
@@ -259,7 +273,7 @@ src/CMakeFiles/rooms.dir/commonbehaviorI.cpp.s: cmake_force
 src/CMakeFiles/rooms.dir/genericworker.cpp.o: src/CMakeFiles/rooms.dir/flags.make
 src/CMakeFiles/rooms.dir/genericworker.cpp.o: /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/genericworker.cpp
 src/CMakeFiles/rooms.dir/genericworker.cpp.o: src/CMakeFiles/rooms.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/CMakeFiles/rooms.dir/genericworker.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/CMakeFiles/rooms.dir/genericworker.cpp.o"
 	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/rooms.dir/genericworker.cpp.o -MF CMakeFiles/rooms.dir/genericworker.cpp.o.d -o CMakeFiles/rooms.dir/genericworker.cpp.o -c /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/genericworker.cpp
 
 src/CMakeFiles/rooms.dir/genericworker.cpp.i: cmake_force
@@ -269,20 +283,6 @@ src/CMakeFiles/rooms.dir/genericworker.cpp.i: cmake_force
 src/CMakeFiles/rooms.dir/genericworker.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rooms.dir/genericworker.cpp.s"
 	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/genericworker.cpp -o CMakeFiles/rooms.dir/genericworker.cpp.s
-
-src/CMakeFiles/rooms.dir/door_detector.cpp.o: src/CMakeFiles/rooms.dir/flags.make
-src/CMakeFiles/rooms.dir/door_detector.cpp.o: /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/door_detector.cpp
-src/CMakeFiles/rooms.dir/door_detector.cpp.o: src/CMakeFiles/rooms.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/CMakeFiles/rooms.dir/door_detector.cpp.o"
-	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/rooms.dir/door_detector.cpp.o -MF CMakeFiles/rooms.dir/door_detector.cpp.o.d -o CMakeFiles/rooms.dir/door_detector.cpp.o -c /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/door_detector.cpp
-
-src/CMakeFiles/rooms.dir/door_detector.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/rooms.dir/door_detector.cpp.i"
-	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/door_detector.cpp > CMakeFiles/rooms.dir/door_detector.cpp.i
-
-src/CMakeFiles/rooms.dir/door_detector.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/rooms.dir/door_detector.cpp.s"
-	cd /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/door_detector.cpp -o CMakeFiles/rooms.dir/door_detector.cpp.s
 
 src/CMakeFiles/rooms.dir/CommonBehavior.cpp.o: src/CMakeFiles/rooms.dir/flags.make
 src/CMakeFiles/rooms.dir/CommonBehavior.cpp.o: src/CommonBehavior.cpp
@@ -346,6 +346,7 @@ rooms_OBJECTS = \
 "CMakeFiles/rooms.dir/specificworker.cpp.o" \
 "CMakeFiles/rooms.dir/specificmonitor.cpp.o" \
 "CMakeFiles/rooms.dir/graph.cpp.o" \
+"CMakeFiles/rooms.dir/door_detector.cpp.o" \
 "CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp.o" \
 "CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplication.cpp.o" \
 "CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.o" \
@@ -354,7 +355,6 @@ rooms_OBJECTS = \
 "CMakeFiles/rooms.dir/genericmonitor.cpp.o" \
 "CMakeFiles/rooms.dir/commonbehaviorI.cpp.o" \
 "CMakeFiles/rooms.dir/genericworker.cpp.o" \
-"CMakeFiles/rooms.dir/door_detector.cpp.o" \
 "CMakeFiles/rooms.dir/CommonBehavior.cpp.o" \
 "CMakeFiles/rooms.dir/GenericBase.cpp.o" \
 "CMakeFiles/rooms.dir/Lidar3D.cpp.o" \
@@ -367,6 +367,7 @@ rooms_EXTERNAL_OBJECTS =
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/specificworker.cpp.o
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/specificmonitor.cpp.o
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/graph.cpp.o
+/home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/door_detector.cpp.o
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/abstract_graphic_viewer/abstract_graphic_viewer.cpp.o
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/rapplication/rapplication.cpp.o
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/home/robocomp/robocomp/classes/sigwatch/sigwatch.cpp.o
@@ -375,7 +376,6 @@ rooms_EXTERNAL_OBJECTS =
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/genericmonitor.cpp.o
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/commonbehaviorI.cpp.o
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/genericworker.cpp.o
-/home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/door_detector.cpp.o
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/CommonBehavior.cpp.o
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/GenericBase.cpp.o
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/bin/rooms: src/CMakeFiles/rooms.dir/Lidar3D.cpp.o
