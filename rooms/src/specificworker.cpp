@@ -80,15 +80,27 @@ void SpecificWorker::compute()
 
     // draw
     //draw_lidar(points, viewer);
-    graph.print();
 
     draw_lines(lines, viewer);
     draw_target_door(door_target, viewer);
+
+
+
+    const auto& currentNodes = graph.getNodes();
+    if (!currentNodes.empty()) {
+        std::cout << "Habitación actual: " << currentNodes.back() << std::endl;
+    }
+
+
 
 }
 ///////////////////////////////////////////////////////////////////////////////
 void SpecificWorker::state_machine(const Doors &doors)
 {
+
+
+
+
     switch (state)
     {
         case States::IDLE:
@@ -153,26 +165,60 @@ void SpecificWorker::state_machine(const Doors &doors)
         }
         case States::GO_THROUGH:
         {
+            const auto& currentNodes = graph.getNodes();
+
+            std::cout << "Habitación actual: " << currentNodes.back() << std::endl;
+
             auto now = std::chrono::steady_clock::now();
 
-            // Check if the state just started
+            // Verificar si el estado acaba de comenzar
             if (!goThroughStartTime.time_since_epoch().count())
                 goThroughStartTime = now;
 
-            // Check if 5000 ms have passed
+            // Verificar si han pasado 5000 ms
             if (std::chrono::duration_cast<std::chrono::milliseconds>(now - goThroughStartTime) < std::chrono::milliseconds(10000))
             {
-                // Less than 5 seconds have passed, continue moving the robot
+                // Menos de 5 segundos han pasado, continuar moviendo el robot
                 move_robot(0, 1.0, 0);
             }
             else
             {
-                // 5 seconds have passed, reset the timer and change state
-                goThroughStartTime = std::chrono::steady_clock::time_point();  // Reset timer
-                state = States::SEARCH_DOOR; // Transition to the next state
+                // Han pasado 5 segundos, resetear el temporizador y cambiar de estado
+                goThroughStartTime = std::chrono::steady_clock::time_point();  // Resetear el temporizador
+
+                // Obtener el número actual de nodos
+                if (currentNodes.size() <= 3)
+                {
+                    int newNode = graph.add_node();
+                    graph.add_edge(newNode - 1, newNode);
+                    std::cout << "Habitación " << newNode << " añadida al grafo al pasar por la puerta." << std::endl;
+                }
+                else {
+                    static int contador = 0; // Variable estática para mantener su valor entre llamadas
+
+                    // Aquí va la lógica que se ejecutará en cada iteración
+                    std::cout << "Habitación actual: " << contador << std::endl;
+
+                    // Incrementar el contador
+                    contador++;
+
+                    // Si el contador llega a 4, lo reseteamos
+                    if (contador == 4) {
+                        contador = 0;
+                    }
+
+                }
+
+
+
+
+
+
+                state = States::SEARCH_DOOR; // Transición al siguiente estado
             }
             break;
         }
+
 
     }
 }

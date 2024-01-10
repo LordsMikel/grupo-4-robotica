@@ -19,6 +19,17 @@ public:
     Graph();
     int add_node();
     int add_edge (int n1, int n2);
+
+    size_t get_node_count() const {
+        return nodes.size();
+    }
+
+
+    // Método para obtener una copia del vector de nodos
+    std::vector<int> getNodes() const {
+        return nodes;
+    }
+
     void print();
 };
 

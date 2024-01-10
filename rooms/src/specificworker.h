@@ -88,6 +88,9 @@ private:
     Graph graph;
 
 
+
+    bool primeraHabitacionAgregada = false; // Nuevo miembro para rastrear la habitación inicial
+
     // In your SpecificWorker class
     std::chrono::steady_clock::time_point goThroughStartTime;
 
