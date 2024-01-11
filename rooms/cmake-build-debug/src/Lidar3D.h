@@ -84,6 +84,29 @@ struct TPoint
 
 using TPoints = ::std::vector<TPoint>;
 
+using TFloatArray = ::std::vector<float>;
+
+using TIntArray = ::std::vector<int>;
+
+struct TDataImage
+{
+    long long int timestamp;
+    ::RoboCompLidar3D::TFloatArray XArray;
+    ::RoboCompLidar3D::TFloatArray YArray;
+    ::RoboCompLidar3D::TFloatArray ZArray;
+    ::RoboCompLidar3D::TIntArray XPixel;
+    ::RoboCompLidar3D::TIntArray YPixel;
+
+    /**
+     * Obtains a tuple containing all of the struct's data members.
+     * @return The data members in a tuple.
+     */
+    std::tuple<const long long int&, const ::RoboCompLidar3D::TFloatArray&, const ::RoboCompLidar3D::TFloatArray&, const ::RoboCompLidar3D::TFloatArray&, const ::RoboCompLidar3D::TIntArray&, const ::RoboCompLidar3D::TIntArray&> ice_tuple() const
+    {
+        return std::tie(timestamp, XArray, YArray, ZArray, XPixel, YPixel);
+    }
+};
+
 struct TData
 {
     ::RoboCompLidar3D::TPoints points;
@@ -151,6 +174,11 @@ public:
     bool _iceD_getLidarData(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
+    virtual TDataImage getLidarDataArrayProyectedInImage(::std::string name, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_getLidarDataArrayProyectedInImage(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
     virtual TData getLidarDataProyectedInImage(::std::string name, const ::Ice::Current& current) = 0;
     /// \cond INTERNAL
     bool _iceD_getLidarDataProyectedInImage(::IceInternal::Incoming&, const ::Ice::Current&);
@@ -199,6 +227,32 @@ public:
 
     /// \cond INTERNAL
     void _iceI_getLidarData(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::RoboCompLidar3D::TData>>&, const ::std::string&, float, float, int, const ::Ice::Context&);
+    /// \endcond
+
+    TDataImage getLidarDataArrayProyectedInImage(const ::std::string& name, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makePromiseOutgoing<::RoboCompLidar3D::TDataImage>(true, this, &Lidar3DPrx::_iceI_getLidarDataArrayProyectedInImage, name, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto getLidarDataArrayProyectedInImageAsync(const ::std::string& name, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<::RoboCompLidar3D::TDataImage>>().get_future())
+    {
+        return _makePromiseOutgoing<::RoboCompLidar3D::TDataImage, P>(false, this, &Lidar3DPrx::_iceI_getLidarDataArrayProyectedInImage, name, context);
+    }
+
+    ::std::function<void()>
+    getLidarDataArrayProyectedInImageAsync(const ::std::string& name,
+                                           ::std::function<void(::RoboCompLidar3D::TDataImage)> response,
+                                           ::std::function<void(::std::exception_ptr)> ex = nullptr,
+                                           ::std::function<void(bool)> sent = nullptr,
+                                           const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<::RoboCompLidar3D::TDataImage>(std::move(response), std::move(ex), std::move(sent), this, &RoboCompLidar3D::Lidar3DPrx::_iceI_getLidarDataArrayProyectedInImage, name, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_getLidarDataArrayProyectedInImage(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<::RoboCompLidar3D::TDataImage>>&, const ::std::string&, const ::Ice::Context&);
     /// \endcond
 
     TData getLidarDataProyectedInImage(const ::std::string& name, const ::Ice::Context& context = ::Ice::noExplicitContext)
@@ -293,6 +347,23 @@ struct StreamReader<::RoboCompLidar3D::TPoint, S>
 };
 
 template<>
+struct StreamableTraits<::RoboCompLidar3D::TDataImage>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 13;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamReader<::RoboCompLidar3D::TDataImage, S>
+{
+    static void read(S* istr, ::RoboCompLidar3D::TDataImage& v)
+    {
+        istr->readAll(v.timestamp, v.XArray, v.YArray, v.ZArray, v.XPixel, v.YPixel);
+    }
+};
+
+template<>
 struct StreamableTraits<::RoboCompLidar3D::TData>
 {
     static const StreamHelperCategory helper = StreamHelperCategoryStruct;
@@ -375,6 +446,20 @@ struct TPoint
 
 typedef ::std::vector<TPoint> TPoints;
 
+typedef ::std::vector< ::Ice::Float> TFloatArray;
+
+typedef ::std::vector< ::Ice::Int> TIntArray;
+
+struct TDataImage
+{
+    ::Ice::Long timestamp;
+    ::RoboCompLidar3D::TFloatArray XArray;
+    ::RoboCompLidar3D::TFloatArray YArray;
+    ::RoboCompLidar3D::TFloatArray ZArray;
+    ::RoboCompLidar3D::TIntArray XPixel;
+    ::RoboCompLidar3D::TIntArray YPixel;
+};
+
 struct TData
 {
     ::RoboCompLidar3D::TPoints points;
@@ -394,6 +479,14 @@ namespace RoboCompLidar3D
  */
 class Callback_Lidar3D_getLidarData_Base : public virtual ::IceInternal::CallbackBase { };
 typedef ::IceUtil::Handle< Callback_Lidar3D_getLidarData_Base> Callback_Lidar3D_getLidarDataPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::RoboCompLidar3D::Lidar3D::begin_getLidarDataArrayProyectedInImage.
+ * Create a wrapper instance by calling ::RoboCompLidar3D::newCallback_Lidar3D_getLidarDataArrayProyectedInImage.
+ */
+class Callback_Lidar3D_getLidarDataArrayProyectedInImage_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_Lidar3D_getLidarDataArrayProyectedInImage_Base> Callback_Lidar3D_getLidarDataArrayProyectedInImagePtr;
 
 /**
  * Base class for asynchronous callback wrapper classes used for calls to
@@ -458,6 +551,44 @@ public:
 private:
 
     ::Ice::AsyncResultPtr _iceI_begin_getLidarData(const ::std::string&, ::Ice::Float, ::Ice::Float, ::Ice::Int, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    ::RoboCompLidar3D::TDataImage getLidarDataArrayProyectedInImage(const ::std::string& name, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return end_getLidarDataArrayProyectedInImage(_iceI_begin_getLidarDataArrayProyectedInImage(name, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_getLidarDataArrayProyectedInImage(const ::std::string& name, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_getLidarDataArrayProyectedInImage(name, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_getLidarDataArrayProyectedInImage(const ::std::string& name, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_getLidarDataArrayProyectedInImage(name, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_getLidarDataArrayProyectedInImage(const ::std::string& name, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_getLidarDataArrayProyectedInImage(name, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_getLidarDataArrayProyectedInImage(const ::std::string& name, const ::RoboCompLidar3D::Callback_Lidar3D_getLidarDataArrayProyectedInImagePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_getLidarDataArrayProyectedInImage(name, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_getLidarDataArrayProyectedInImage(const ::std::string& name, const ::Ice::Context& context, const ::RoboCompLidar3D::Callback_Lidar3D_getLidarDataArrayProyectedInImagePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_getLidarDataArrayProyectedInImage(name, context, cb, cookie);
+    }
+
+    ::RoboCompLidar3D::TDataImage end_getLidarDataArrayProyectedInImage(const ::Ice::AsyncResultPtr& result);
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_getLidarDataArrayProyectedInImage(const ::std::string&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
 
 public:
 
@@ -605,6 +736,11 @@ public:
     bool _iceD_getLidarData(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
+    virtual TDataImage getLidarDataArrayProyectedInImage(const ::std::string& name, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_getLidarDataArrayProyectedInImage(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
     virtual TData getLidarDataProyectedInImage(const ::std::string& name, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_getLidarDataProyectedInImage(::IceInternal::Incoming&, const ::Ice::Current&);
@@ -686,6 +822,42 @@ struct StreamReader< ::RoboCompLidar3D::TPoint, S>
         istr->read(v.distance2d);
         istr->read(v.pixelX);
         istr->read(v.pixelY);
+    }
+};
+
+template<>
+struct StreamableTraits< ::RoboCompLidar3D::TDataImage>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryStruct;
+    static const int minWireSize = 13;
+    static const bool fixedLength = false;
+};
+
+template<typename S>
+struct StreamWriter< ::RoboCompLidar3D::TDataImage, S>
+{
+    static void write(S* ostr, const ::RoboCompLidar3D::TDataImage& v)
+    {
+        ostr->write(v.timestamp);
+        ostr->write(v.XArray);
+        ostr->write(v.YArray);
+        ostr->write(v.ZArray);
+        ostr->write(v.XPixel);
+        ostr->write(v.YPixel);
+    }
+};
+
+template<typename S>
+struct StreamReader< ::RoboCompLidar3D::TDataImage, S>
+{
+    static void read(S* istr, ::RoboCompLidar3D::TDataImage& v)
+    {
+        istr->read(v.timestamp);
+        istr->read(v.XArray);
+        istr->read(v.YArray);
+        istr->read(v.ZArray);
+        istr->read(v.XPixel);
+        istr->read(v.YPixel);
     }
 };
 
@@ -875,6 +1047,158 @@ template<class T, typename CT> Callback_Lidar3D_getLidarDataPtr
 newCallback_Lidar3D_getLidarData(T* instance, void (T::*cb)(const TData&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
 {
     return new Callback_Lidar3D_getLidarData<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::RoboCompLidar3D::Lidar3D::begin_getLidarDataArrayProyectedInImage.
+ * Create a wrapper instance by calling ::RoboCompLidar3D::newCallback_Lidar3D_getLidarDataArrayProyectedInImage.
+ */
+template<class T>
+class CallbackNC_Lidar3D_getLidarDataArrayProyectedInImage : public Callback_Lidar3D_getLidarDataArrayProyectedInImage_Base, public ::IceInternal::TwowayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)(const TDataImage&);
+
+    CallbackNC_Lidar3D_getLidarDataArrayProyectedInImage(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallbackNC<T>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        Lidar3DPrx proxy = Lidar3DPrx::uncheckedCast(result->getProxy());
+        TDataImage ret;
+        try
+        {
+            ret = proxy->end_getLidarDataArrayProyectedInImage(result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::CallbackNC<T>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::CallbackNC<T>::_callback.get()->*_response)(ret);
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::RoboCompLidar3D::Lidar3D::begin_getLidarDataArrayProyectedInImage.
+ */
+template<class T> Callback_Lidar3D_getLidarDataArrayProyectedInImagePtr
+newCallback_Lidar3D_getLidarDataArrayProyectedInImage(const IceUtil::Handle<T>& instance, void (T::*cb)(const TDataImage&), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_Lidar3D_getLidarDataArrayProyectedInImage<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::RoboCompLidar3D::Lidar3D::begin_getLidarDataArrayProyectedInImage.
+ */
+template<class T> Callback_Lidar3D_getLidarDataArrayProyectedInImagePtr
+newCallback_Lidar3D_getLidarDataArrayProyectedInImage(T* instance, void (T::*cb)(const TDataImage&), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_Lidar3D_getLidarDataArrayProyectedInImage<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::RoboCompLidar3D::Lidar3D::begin_getLidarDataArrayProyectedInImage.
+ * Create a wrapper instance by calling ::RoboCompLidar3D::newCallback_Lidar3D_getLidarDataArrayProyectedInImage.
+ */
+template<class T, typename CT>
+class Callback_Lidar3D_getLidarDataArrayProyectedInImage : public Callback_Lidar3D_getLidarDataArrayProyectedInImage_Base, public ::IceInternal::TwowayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const TDataImage&, const CT&);
+
+    Callback_Lidar3D_getLidarDataArrayProyectedInImage(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallback<T, CT>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        Lidar3DPrx proxy = Lidar3DPrx::uncheckedCast(result->getProxy());
+        TDataImage ret;
+        try
+        {
+            ret = proxy->end_getLidarDataArrayProyectedInImage(result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::Callback<T, CT>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::Callback<T, CT>::_callback.get()->*_response)(ret, CT::dynamicCast(result->getCookie()));
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::RoboCompLidar3D::Lidar3D::begin_getLidarDataArrayProyectedInImage.
+ */
+template<class T, typename CT> Callback_Lidar3D_getLidarDataArrayProyectedInImagePtr
+newCallback_Lidar3D_getLidarDataArrayProyectedInImage(const IceUtil::Handle<T>& instance, void (T::*cb)(const TDataImage&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_Lidar3D_getLidarDataArrayProyectedInImage<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::RoboCompLidar3D::Lidar3D::begin_getLidarDataArrayProyectedInImage.
+ */
+template<class T, typename CT> Callback_Lidar3D_getLidarDataArrayProyectedInImagePtr
+newCallback_Lidar3D_getLidarDataArrayProyectedInImage(T* instance, void (T::*cb)(const TDataImage&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_Lidar3D_getLidarDataArrayProyectedInImage<T, CT>(instance, cb, excb, sentcb);
 }
 
 /**

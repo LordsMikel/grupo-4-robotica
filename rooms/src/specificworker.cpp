@@ -173,6 +173,9 @@ void SpecificWorker::state_machine(const Doors &doors)
                     std::cout << "Habitación " << newNode - 1 << " añadida al grafo al pasar por la puerta." << std::endl;
 
                     contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
+
+
+
                 }
                 std::cout << "Habitación actual: " << contadorHabitacion << std::endl;
                 return;
@@ -210,9 +213,23 @@ void SpecificWorker::state_machine(const Doors &doors)
 
                 //La vuelta
                 //Reseteamos para la vuelta.
-                if (currentNodes.size() == 4) {
-                    contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
+                if (primeraVuelta) {
+                    std::cout << ""<<std::endl;
+
+                    if (currentNodes.size() == 4) {
+                        primeraVuelta = false;
+                        contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
+
+                    }
+
                 }
+                else {
+
+                    contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
+
+                }
+
+
 
                 state = States::SEARCH_DOOR; // Transición al siguiente estado
 

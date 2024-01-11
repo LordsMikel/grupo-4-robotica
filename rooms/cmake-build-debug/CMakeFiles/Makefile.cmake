@@ -47,6 +47,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/snap/clion/261/bin/cmake/linux/x64/share/cmake-3.27/Modules/CMakeTestCCompiler.cmake"
   "/snap/clion/261/bin/cmake/linux/x64/share/cmake-3.27/Modules/CMakeTestCXXCompiler.cmake"
   "/snap/clion/261/bin/cmake/linux/x64/share/cmake-3.27/Modules/CMakeTestCompilerCommon.cmake"
+  "/snap/clion/261/bin/cmake/linux/x64/share/cmake-3.27/Modules/CMakeUnixFindMake.cmake"
   "/snap/clion/261/bin/cmake/linux/x64/share/cmake-3.27/Modules/CheckCSourceCompiles.cmake"
   "/snap/clion/261/bin/cmake/linux/x64/share/cmake-3.27/Modules/CheckCXXCompilerFlag.cmake"
   "/snap/clion/261/bin/cmake/linux/x64/share/cmake-3.27/Modules/CheckCXXSourceCompiles.cmake"

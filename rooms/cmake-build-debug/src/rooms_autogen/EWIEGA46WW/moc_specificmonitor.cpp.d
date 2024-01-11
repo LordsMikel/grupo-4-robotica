@@ -1,10 +1,5 @@
 /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src/rooms_autogen/EWIEGA46WW/moc_specificmonitor.cpp: /home/robocomp/robocomp/components/grupo-4-robotica/rooms/src/specificmonitor.h \
   /home/robocomp/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src/rooms_autogen/moc_predefs.h \
-  /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src/CommonBehavior.h \
-  /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src/GenericBase.h \
-  /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src/Lidar3D.h \
-  /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src/OmniRobot.h \
-  /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/rooms/cmake-build-debug/src/ui_mainUI.h \
   /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/rooms/src/config.h \
   /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/rooms/src/genericmonitor.h \
   /home/usuario/robocomp_ws/src/robocomp/components/grupo-4-robotica/rooms/src/genericworker.h \
@@ -454,7 +449,6 @@
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QSize \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QSizeF \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringList \
-  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVariant \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QtCore \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/QtCoreDepends \
   /usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractanimation.h \
@@ -777,13 +771,6 @@
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qvectornd.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qwindow.h \
   /usr/include/x86_64-linux-gnu/qt6/QtGui/qwindowdefs.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QApplication \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qapplication.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsizepolicy.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgets-config.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
-  /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h \
   /usr/include/x86_64-linux-gnu/sys/cdefs.h \
   /usr/include/x86_64-linux-gnu/sys/select.h \
   /usr/include/x86_64-linux-gnu/sys/syscall.h \
