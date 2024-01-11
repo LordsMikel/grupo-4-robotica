@@ -52,6 +52,14 @@ public:
         return nodes;
     }
 
+
+    // En tu clase Graph
+    void reset_graph() {
+        nodes.clear();
+        edges.clear();
+        add_node(); // Añadir el nodo inicial 0
+    }
+
     void print();
 };
 

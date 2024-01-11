@@ -147,6 +147,28 @@ void SpecificWorker::state_machine(const Doors &doors)
             {
                 move_robot(1,0, 0);
                 qInfo() << "GOTO_DOOR Target achieved";
+                const auto& currentNodes = graph.getNodes();
+                // Obtener el número actual de nodos
+                if (currentNodes.size() <= 3)
+                {   int aux = 0;
+                    if (currentNodes.back() == 2) {
+                        aux = 1;
+                    }
+                    int newNode = graph.add_node();
+                    graph.add_edge(newNode - 1, newNode);
+                    std::cout << "Habitación " << newNode - 1 << " añadida al grafo al pasar por la puerta." << std::endl;
+
+
+
+                    contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
+
+
+                    if (aux == 1) contadorHabitacion = 2;
+
+
+                }
+
+
                 state = States::ALIGN;
             }
             else    // do what you have to do and stay in this state
@@ -165,19 +187,6 @@ void SpecificWorker::state_machine(const Doors &doors)
                 move_robot(0,0,0);
                 state = States::GO_THROUGH;
 
-                const auto& currentNodes = graph.getNodes();
-                // Obtener el número actual de nodos
-                if (currentNodes.size() <= 3)
-                {   int newNode = graph.add_node();
-                    graph.add_edge(newNode - 1, newNode);
-                    std::cout << "Habitación " << newNode - 1 << " añadida al grafo al pasar por la puerta." << std::endl;
-
-                    contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
-
-
-
-                }
-                std::cout << "Habitación actual: " << contadorHabitacion << std::endl;
                 return;
             }
             //qInfo() << door_target.angle_to_robot();
@@ -213,21 +222,21 @@ void SpecificWorker::state_machine(const Doors &doors)
 
                 //La vuelta
                 //Reseteamos para la vuelta.
-                if (primeraVuelta) {
-                    std::cout << ""<<std::endl;
 
-                    if (currentNodes.size() == 4) {
-                        primeraVuelta = false;
-                        contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
 
-                    }
 
-                }
-                else {
 
+                if (currentNodes.size() == 4 && incrementar) {
                     contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
-
                 }
+
+                if (currentNodes.size() == 4 && !incrementar) {
+                    contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
+                    incrementar = true;
+                }
+
+
+
 
 
 
