@@ -1,27 +1,28 @@
-/*
- *    Copyright (C) 2023 by YOUR NAME HERE
- *
- *    This file is part of RoboComp
- *
- *    RoboComp is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
- *
- *    RoboComp is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License
- *    along with RoboComp.  If not, see <http://www.gnu.org/licenses/>.
- */
+/******************************************************************************
+Aviso Legal: Este código fuente está protegido por derechos de autor y es
+propiedad exclusiva de Miguel Medina Cantos, estudiante de la Carrera de Ingeniería
+Informática en Ingeniería de Computadores. La copia o reproducción total o parcial
+de este código sin permiso escrito de Miguel Medina Cantos está estrictamente prohibida,
+excepto en los siguientes casos:
 
-/**
-	\brief
-	@author authorname
-*/
+1. El profesor de robótica tiene permiso para copiar y utilizar este código tal cual para cualquier
+   propósito.
 
+Cualquier usuario que copie este código está requerido a realizar cambios sustanciales
+en el mismo antes de su uso en cualquier aplicación o proyecto. La mera copia sin
+modificaciones sustanciales no está permitida y puede incurrir en acciones legales
+por parte de Miguel Medina Cantos.
+
+Miguel Medina Cantos
+Carrera de Ingeniería Informática en Ingeniería de Computadores
+11 de enero de 2024, 17:16
+
+Este aviso legal se aplica a todos los componentes y archivos incluidos en este
+proyecto, incluyendo, pero sin limitarse a, código fuente, documentación y archivos
+de configuración.
+
+© 2024 Miguel Medina Cantos. Todos los derechos reservados.
+******************************************************************************/
 #ifndef SPECIFICWORKER_H
 #define SPECIFICWORKER_H
 
@@ -89,9 +90,12 @@ private:
 
 
 
-    bool primeraHabitacionAgregada = false; // Nuevo miembro para rastrear la habitación inicial
+    // Nuevo miembro para rastrear la habitación actual
+    int contadorHabitacion = 0;
 
-    // In your SpecificWorker class
+
+
+    // El cronometro de 10s, para las habitaciones
     std::chrono::steady_clock::time_point goThroughStartTime;
 
 };

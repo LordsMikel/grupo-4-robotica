@@ -1,21 +1,31 @@
-/*
- *    Copyright (C) 2023 by YOUR NAME HERE
- *
- *    This file is part of RoboComp
- *
- *    RoboComp is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
- *
- *    RoboComp is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License
- *    along with RoboComp.  If not, see <http://www.gnu.org/licenses/>.
- */
+/******************************************************************************
+Aviso Legal: Este código fuente está protegido por derechos de autor y es
+propiedad exclusiva de Miguel Medina Cantos, estudiante de la Carrera de Ingeniería
+Informática en Ingeniería de Computadores. La copia o reproducción total o parcial
+de este código sin permiso escrito de Miguel Medina Cantos está estrictamente prohibida,
+excepto en los siguientes casos:
+
+1. El profesor de robótica tiene permiso para copiar y utilizar este código tal cual para cualquier
+   propósito.
+
+Cualquier usuario que copie este código está requerido a realizar cambios sustanciales
+en el mismo antes de su uso en cualquier aplicación o proyecto. La mera copia sin
+modificaciones sustanciales no está permitida y puede incurrir en acciones legales
+por parte de Miguel Medina Cantos.
+
+Miguel Medina Cantos
+Carrera de Ingeniería Informática en Ingeniería de Computadores
+11 de enero de 2024, 17:16
+
+Este aviso legal se aplica a todos los componentes y archivos incluidos en este
+proyecto, incluyendo, pero sin limitarse a, código fuente, documentación y archivos
+de configuración.
+
+© 2024 Miguel Medina Cantos. Todos los derechos reservados.
+******************************************************************************/
+
+
+
 #include "specificworker.h"
 #include <cppitertools/sliding_window.hpp>
 #include <cppitertools/combinations.hpp>
@@ -86,29 +96,6 @@ void SpecificWorker::compute()
 
 
 
-    const auto& currentNodes = graph.getNodes();
-
-    if (currentNodes.size() == 3) {
-
-        static int contador = 0; // Variable estática para mantener su valor entre llamadas
-
-// Aquí va la lógica que se ejecutará en cada iteración
-        std::cout << "Contador: " << contador << std::endl;
-
-// Incrementar el contador
-        contador++;
-
-// Si el contador llega a 4, lo reseteamos
-        if (contador == 4) {
-            contador = 0;
-        }
-
-
-
-    }
-    else
-    std::cout << "Habitación actual: " << currentNodes.back() << std::endl;
-
 
 
 }
@@ -152,6 +139,7 @@ void SpecificWorker::state_machine(const Doors &doors)
         case States::GOTO_DOOR:
         {
             graph.print();
+            std::cout << "Habitación actual: " << contadorHabitacion << std::endl;
 
             //Info() << "GOTO_DOOR";
             //qInfo() << "distance " << door_target.dist_to_robot();
@@ -177,21 +165,17 @@ void SpecificWorker::state_machine(const Doors &doors)
                 move_robot(0,0,0);
                 state = States::GO_THROUGH;
 
-                qInfo()<<"HOLA222";
                 const auto& currentNodes = graph.getNodes();
                 // Obtener el número actual de nodos
                 if (currentNodes.size() <= 3)
-                {
-                    int newNode = graph.add_node();
+                {   int newNode = graph.add_node();
                     graph.add_edge(newNode - 1, newNode);
-                    std::cout << "Habitación " << newNode << " añadida al grafo al pasar por la puerta." << std::endl;
+                    std::cout << "Habitación " << newNode - 1 << " añadida al grafo al pasar por la puerta." << std::endl;
+
+                    contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
                 }
-
-
-
+                std::cout << "Habitación actual: " << contadorHabitacion << std::endl;
                 return;
-
-
             }
             //qInfo() << door_target.angle_to_robot();
             float rot = -0.5 * door_target.angle_to_robot();
@@ -209,24 +193,29 @@ void SpecificWorker::state_machine(const Doors &doors)
             if (!goThroughStartTime.time_since_epoch().count())
                 goThroughStartTime = now;
 
-            // Verificar si han pasado 5000 ms
+            // Verificar si han pasado 10s
             if (std::chrono::duration_cast<std::chrono::milliseconds>(now - goThroughStartTime) < std::chrono::milliseconds(10000))
             {
-                // Menos de 5 segundos han pasado, continuar moviendo el robot
+                // Menos de 10 segundos han pasado, continuar moviendo el robot
                 move_robot(0, 1.0, 0);
             }
             else
             {
-                // Han pasado 5 segundos, resetear el temporizador y cambiar de estado
+                // Han pasado 10 segundos, resetear el temporizador y cambiar de estado
                 goThroughStartTime = std::chrono::steady_clock::time_point();  // Resetear el temporizador
 
 
 
+                const auto& currentNodes = graph.getNodes();
 
-
-
+                //La vuelta
+                //Reseteamos para la vuelta.
+                if (currentNodes.size() == 4) {
+                    contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
+                }
 
                 state = States::SEARCH_DOOR; // Transición al siguiente estado
+
             }
             break;
         }
