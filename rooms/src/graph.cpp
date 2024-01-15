@@ -50,6 +50,19 @@ int Graph::add_edge(int n1, int n2) {
 }
 
 
+// Implementación de get_node_count
+size_t Graph::get_node_count() const {
+    return nodes.size();
+}
+
+// Implementación de getNodes
+std::vector<int> Graph::getNodes() const {
+    return nodes;
+}
+
+
+
+
 void Graph::print()
 {
     for (const auto &n : nodes)
