@@ -88,8 +88,7 @@ void SpecificWorker::compute()
     // state machine
     state_machine(doors);
 
-    // draw
-    //draw_lidar(points, viewer);
+
 
     draw_lines(lines, viewer);
     draw_target_door(door_target, viewer);
@@ -138,7 +137,9 @@ void SpecificWorker::state_machine(const Doors &doors)
         }
         case States::GOTO_DOOR:
         {
+
             graph.print();
+        
             std::cout << "Habitación actual: " << contadorHabitacion << std::endl;
 
             //Info() << "GOTO_DOOR";
@@ -149,23 +150,33 @@ void SpecificWorker::state_machine(const Doors &doors)
                 qInfo() << "GOTO_DOOR Target achieved";
                 const auto& currentNodes = graph.getNodes();
                 // Obtener el número actual de nodos
-                if (currentNodes.size() <= 3)
-                {   int aux = 0;
+
+                
+                // La comprobación de si hay 3 o 4 nodos se hace debido a que en la habitación 2 se detectan 2 nodos esto si está en 0.02 si funciona con 0.01 quedar 0.01, y en el resto solo 1.
+
+                if (currentNodes.size() <= 3){   
+                    
+                    bool comprobacion = false;
+                
+                    
+                    // En la habitación 2 se detectan 2 nodos, por lo que si hay 2 nodos, estamos en la habitación 2.
+                    // En el resto de habitaciones se detecta 1 nodo, por lo que si hay 3 nodos, estamos en la habitación 2.
+                    // Esto suele pasar cuando el robot entra en la habitación 2, por lo que hay que comprobar si el último nodo es el 2.
+                    // Pasa debido a que el robot detecta más nodos de los que debería, por lo que hay que comprobar si el último nodo es el 2.
+        
                     if (currentNodes.back() == 2) {
-                        aux = 1;
+                        comprobacion = true;
                     }
+                
                     int newNode = graph.add_node();
                     graph.add_edge(newNode - 1, newNode);
-                    std::cout << "Habitación " << newNode - 1 << " añadida al grafo al pasar por la puerta." << std::endl;
-
-
+                    std::cout << "Habitación " << newNode - 1 << "detectada y añadida al grafo" << std::endl;
 
                     contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
 
-
-                    if (aux == 1) contadorHabitacion = 2;
-
-
+                    if (comprobacion) { 
+                        contadorHabitacion = 2;
+                    }
                 }
 
 
@@ -182,13 +193,52 @@ void SpecificWorker::state_machine(const Doors &doors)
         }
         case States::ALIGN:
         {
-            if( fabs(door_target.angle_to_robot()) < 0.02)
+
+
+             /*       
+             
+             printf ("Prueba de alineamiento 1")
+
+             float aling_treshold = 0.01;
+
+            if (door_target.angle_to_robot() < aling_treshold && door_target.angle_to_robot() > -aling_treshold)
+            {
+                move_robot(0,0,0);
+                state = States::GO_THROUGH;
+                return;
+            } */
+            
+
+             /*       
+             
+             printf ("Prueba de alineamiento 2")
+
+             float aling_treshold = 0.02;
+
+            if (door_target.angle_to_robot() < aling_treshold && door_target.angle_to_robot() > -aling_treshold)
+            {
+                move_robot(0,0,0);
+                state = States::GO_THROUGH;
+                return;
+            } */
+
+
+
+            //printf ("Alineamiento \n")
+
+            // En el codigo original, está puesto 0.01, se prueba mañana con 0.01 y si no funciona, se prueba con 0.02
+                
+            // NOTA: El robot se alinea con la puerta, pero no entra en la habitación, pero la habitación ya se ha detectado antes en GO_DOOR.
+
+            if(fabs(door_target.angle_to_robot()) < 0.01)
             {
                 move_robot(0,0,0);
                 state = States::GO_THROUGH;
 
                 return;
             }
+            
+            
             //qInfo() << door_target.angle_to_robot();
             float rot = -0.5 * door_target.angle_to_robot();
             move_robot(0,0,rot);
@@ -205,7 +255,7 @@ void SpecificWorker::state_machine(const Doors &doors)
             if (!goThroughStartTime.time_since_epoch().count())
                 goThroughStartTime = now;
 
-            // Verificar si han pasado 10s
+            // Verificar si han pasado 10 segundos
             if (std::chrono::duration_cast<std::chrono::milliseconds>(now - goThroughStartTime) < std::chrono::milliseconds(10000))
             {
                 // Menos de 10 segundos han pasado, continuar moviendo el robot
@@ -219,26 +269,16 @@ void SpecificWorker::state_machine(const Doors &doors)
 
 
                 const auto& currentNodes = graph.getNodes();
+            
 
-                //La vuelta
-                //Reseteamos para la vuelta.
+                // Si hay 4 nodos, entonces estamos en la habitación 3
+                // Esto es debido a que en la habitación 2 se detectan 2 nodos, y en el resto solo 1, por lo que que si hay 4 nodos, estamos en la habitación 3
 
+                if (currentNodes.size() == 4) {
 
-
-
-                if (currentNodes.size() == 4 && incrementar) {
-                    contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
+                contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3    
+    
                 }
-
-                if (currentNodes.size() == 4 && !incrementar) {
-                    contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
-                    incrementar = true;
-                }
-
-
-
-
-
 
                 state = States::SEARCH_DOOR; // Transición al siguiente estado
 
