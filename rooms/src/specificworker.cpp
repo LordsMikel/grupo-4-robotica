@@ -138,9 +138,12 @@ void SpecificWorker::state_machine(const Doors &doors)
         case States::GOTO_DOOR:
         {
 
+
+            std::cout << "Nodos actuales en el grafo: "  << std::endl;
+
+
             graph.print();
 
-            const auto& currentNodes = graph.getNodes();
 
 
 
@@ -195,7 +198,7 @@ void SpecificWorker::state_machine(const Doors &doors)
             static int i = 0;
 
             if (contadorHabitacion == 1) {
-                ms = 1710;
+                ms = 1720;
             }
             if (contadorHabitacion == 2) {
                 ms = 1710;
@@ -237,9 +240,6 @@ void SpecificWorker::state_machine(const Doors &doors)
                 if (graph.get_node_count() == 4 && i == 1) {
 
                     contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
-
-
-
                 }
 
 
