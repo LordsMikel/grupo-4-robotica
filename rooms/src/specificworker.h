@@ -93,9 +93,7 @@ private:
     // Nuevo miembro para rastrear la habitación actual
     int contadorHabitacion = 0;
 
-    bool primeraVuelta = true;
 
-    bool incrementar = false;
 
     // El cronometro de 10s, para las habitaciones
     std::chrono::steady_clock::time_point goThroughStartTime;
