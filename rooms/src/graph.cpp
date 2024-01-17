@@ -35,7 +35,7 @@ Graph::Graph()
 int Graph::add_node()
 {
     nodes.push_back(nodes.size());
-    return nodes.size();
+    return nodes.size()-1;
 }
 
 int Graph::add_edge(int n1, int n2) {
@@ -75,7 +75,7 @@ void Graph::print()
 
     for (const auto &e : edges)
     {
-        std::cout<< e.first << " "  << e.second;
+        std::cout<< e.first << " "  << e.second<<std::endl;
     }
 
     std::cout<<std::endl;
