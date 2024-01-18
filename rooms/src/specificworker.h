@@ -94,6 +94,9 @@ private:
     int contadorHabitacion = 0;
 
 
+    bool arcoFinal = false;
+
+
 
     // El cronometro de 10s, para las habitaciones
     std::chrono::steady_clock::time_point goThroughStartTime;
