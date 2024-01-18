@@ -139,7 +139,6 @@ void SpecificWorker::state_machine(const Doors &doors)
         {
 
 
-            std::cout << "Nodos actuales en el grafo: "  << std::endl;
 
 
             graph.print();
@@ -217,15 +216,13 @@ void SpecificWorker::state_machine(const Doors &doors)
 
             auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(now - goThroughStartTime);
 
-            // Verificar si han pasado menos de 10 segundos
+            // Verificar si han pasado menos de ms milisegundos
             if (elapsed_time < std::chrono::milliseconds(ms))
             {
-                qInfo() << "Holi 1 - Tiempo transcurrido: " << elapsed_time.count() << " ms";
                 // Continuar moviendo el robot
                 move_robot(0, 1.0, 0);
             }
             else if (elapsed_time >= std::chrono::milliseconds(ms)) {
-                qInfo() << "Holi 2 - 10 segundos han pasado";
 
                 // Resetear el temporizador para la próxima vez
                 goThroughStartTime = std::chrono::steady_clock::time_point();
@@ -240,6 +237,11 @@ void SpecificWorker::state_machine(const Doors &doors)
                 if (graph.get_node_count() == 4 && i == 1) {
 
                     contadorHabitacion = (contadorHabitacion + 1) % 4; // Habitaciones de 0 a 3
+                }
+
+                if (contadorHabitacion == 0 && i == 1 && !arcoFinal && graph.get_node_count() == 4) {
+                    graph.add_edge(3,contadorHabitacion);
+                    arcoFinal = true;
                 }
 
 
