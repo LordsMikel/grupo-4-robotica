@@ -197,7 +197,7 @@ void SpecificWorker::state_machine(const Doors &doors)
             static int i = 0;
 
             if (contadorHabitacion == 1) {
-                ms = 1720;
+                ms = 1730;
             }
             if (contadorHabitacion == 2) {
                 ms = 1710;
