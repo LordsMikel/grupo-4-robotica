@@ -65,6 +65,10 @@ std::vector<int> Graph::getNodes() const {
 
 void Graph::print()
 {
+
+    std::cout << "Nodos actuales en el grafo: "  << std::endl;
+
+
     for (const auto &n : nodes)
     {
         std::cout<< n << " " ;
@@ -72,6 +76,7 @@ void Graph::print()
 
     std::cout<<std::endl;
 
+    std::cout<< "Arcos grafo:   " <<std::endl;
 
     for (const auto &e : edges)
     {
